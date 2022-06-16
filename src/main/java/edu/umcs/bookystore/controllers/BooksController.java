@@ -1,0 +1,32 @@
+package edu.umcs.bookystore.controllers;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/books")
+public class BooksController {
+
+	private static final String TEMPLATES_DIRECTORY = "books";
+	private static final Logger logger = LoggerFactory.getLogger(BooksController.class);
+
+	private String template(String name) {
+		return String.format("%s/%s", TEMPLATES_DIRECTORY, name);
+	}
+
+	@GetMapping(value = "/browse")
+	public String getBrowse(Model model) {
+		logger.debug("Browse books endpoint called");
+		return template("browse");
+	}
+
+	@GetMapping(value = "/manage")
+	public String getManage(Model model) {
+		logger.debug("Manage books endpoint called");
+		return template("manage");
+	}
+}

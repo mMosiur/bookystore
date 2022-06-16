@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookystore Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+  <h1>Registration</h1>
+  <div sec:authorize="isAuthenticated()">
+    <p class="alert alert-warning" role="alert">
+      You are already logged in, no need to register.
+    </p>
+    <p>
+      <a th:href="@{/user/logout}">Logout</a>
+    </p>
+  </div>
+  <div sec:authorize="!isAuthenticated()">
+    <div th:if="${usernameAlreadyExists}" class="alert alert-danger" role="alert">
+      User with given email already exists
+    </div>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+      There was an error while creating your account
+    </div>
+    <div th:if="${userCreatedSuccessfully}" class="alert alert-success" role="alert">
+      User created successfully
+      <p><a th:href="@{/user/login}">Login</a></p>
+    </div>
+    <form autocomplete="off" th:action="@{/user/register}" th:object="${user}" method="post">
+      <div>
+        <input type="email" th:field="*{email}" autocomplete="off" placeholder="Email" />
+      </div>
+      <div>
+        <input type="text" th:field="*{firstName}" autocomplete="off" placeholder="First name" />
+      </div>
+      <div>
+        <input type="text" th:field="*{lastName}" autocomplete="off" placeholder="Last name" />
+      </div>
+      <div>
+        <input type="password" th:field="*{password}" autocomplete="off" placeholder="Password" />
+      </div>
+      <input th:disabled="${userCreatedSuccessfully}" type="submit" value="Register" />
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
