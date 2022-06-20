@@ -16,6 +16,7 @@ public class SecurityConfiguration {
 		return http
 				.cors((cors) -> cors.disable())
 				.csrf((csrf) -> csrf.disable())
+				.headers(headers -> headers.frameOptions().disable())
 				.authorizeRequests((authorizeRequests) -> authorizeRequests
 						.anyRequest().permitAll())
 				.formLogin((login) -> login
