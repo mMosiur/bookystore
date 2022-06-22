@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -112,6 +113,93 @@ public class BooksController {
 	@GetMapping(value = "/manage")
 	public String getManage(Model model) {
 		logger.debug("Manage books endpoint called");
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		model.addAttribute("books", this.bookRepository.findAll());
 		return template("manage");
 	}
+
+	@PostMapping(value = "/manage/create-author")
+	public String postCreateAuthor(Model model,
+			@RequestParam String firstName,
+			@RequestParam String lastName) {
+		logger.info("POST create author endpoint called");
+		model.addAttribute("operationType", "create");
+		model.addAttribute("entityType", "author");
+		AuthorEntity author = new AuthorEntity(firstName, lastName);
+		author = this.authorRepository.save(author);
+		model.addAttribute("author", author);
+		return template("operation-successful");
+	}
+
+	@PostMapping(value = "/manage/create-publisher")
+	public String postCreatePublisher(Model model,
+			@RequestParam String name) {
+		logger.info("POST create publisher endpoint called");
+		model.addAttribute("operationType", "create");
+		model.addAttribute("entityType", "publisher");
+		PublisherEntity publisher = new PublisherEntity(name);
+		publisher = this.publisherRepository.save(publisher);
+		model.addAttribute("publisher", publisher);
+		return template("operation-successful");
+	}
+
+	@PostMapping(value = "/manage/create-category")
+	public String postCreateCategory(Model model,
+			@RequestParam String name) {
+		logger.info("POST create category endpoint called");
+		model.addAttribute("operationType", "create");
+		model.addAttribute("entityType", "category");
+		CategoryEntity category = new CategoryEntity(name);
+		category = this.categoryRepository.save(category);
+		model.addAttribute("category", category);
+		return template("operation-successful");
+	}
+
+	@PostMapping(value = "/manage/create-book")
+	public String postCreateBook(Model model,
+			@RequestParam String title,
+			@RequestParam long author,
+			@RequestParam long publisher,
+			@RequestParam long category,
+			@RequestParam double price) {
+		logger.info("POST create book endpoint called");
+		model.addAttribute("operationType", "create");
+		model.addAttribute("entityType", "book");
+		AuthorEntity authorEntity = this.authorRepository.findById(author).orElse(null);
+		if (authorEntity == null) {
+			model.addAttribute("error", "Author not found");
+			return template("operation-failed");
+		}
+		PublisherEntity publisherEntity = this.publisherRepository.findById(publisher).orElse(null);
+		if (publisherEntity == null) {
+			model.addAttribute("error", "Publisher not found");
+			return template("operation-failed");
+		}
+		CategoryEntity categoryEntity = this.categoryRepository.findById(category).orElse(null);
+		if (categoryEntity == null) {
+			model.addAttribute("error", "Category not found");
+			return template("operation-failed");
+		}
+		BookEntity book = new BookEntity(title, authorEntity, publisherEntity, categoryEntity, price);
+		book = this.bookRepository.save(book);
+		model.addAttribute("book", book);
+		return template("operation-successful");
+	}
+
+	@GetMapping(value = "/manage/delete-book")
+	public String getDeleteBook(Model model, @RequestParam long book) {
+		logger.info("POST delete book endpoint called");
+		model.addAttribute("operationType", "delete");
+		model.addAttribute("entityType", "book");
+		BookEntity bookEntity = this.bookRepository.findById(book).orElse(null);
+		if (bookEntity == null) {
+			model.addAttribute("error", "Book not found");
+			return template("operation-failed");
+		}
+		this.bookRepository.delete(bookEntity);
+		return template("operation-successful");
+	}
+
 }

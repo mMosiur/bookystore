@@ -18,6 +18,7 @@ public class SecurityConfiguration {
 				.csrf((csrf) -> csrf.disable())
 				.headers(headers -> headers.frameOptions().disable())
 				.authorizeRequests((authorizeRequests) -> authorizeRequests
+						.antMatchers("/books/manage/*").hasAnyRole("ADMIN")
 						.anyRequest().permitAll())
 				.formLogin((login) -> login
 						.loginPage("/user/login")

@@ -20,5 +20,7 @@
   <input type="submit" value="Apply filter">
 </form>
 <ul>
-  <li th:each="book: ${books}" th:text="${book.title}"></li>
+  <li th:each="book: ${books}">
+    <span th:text="${book.title}"></span>
+  </li>
 </ul>
