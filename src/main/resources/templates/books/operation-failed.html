@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <h1>Error during <span th:text="${entityType}"></span> creation</h1>
+  <h1>Error during <span th:text="${entityType}"></span> <span th:text="${operationType}"></span> operation</h1>
   <div class="alert alert-danger" role="alert" th:text="${error}"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -50,14 +50,23 @@
           <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}"></option>
         </select>
         <select name="publisher">
-          <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}"></option>
+          <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}">
+          </option>
         </select>
         <select name="category">
-          <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"></option>
+          <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}">
+          </option>
         </select>
         <input type="number" name="price" min="0" step="0.01" max="9999.99" required>
         <input type="submit" value="Create book">
       </form>
+      <h2>Book list</h2>
+      <ul>
+        <li th:each="book: ${books}">
+          <span th:text="${book.title}"></span>
+          <a th:href="@{/books/manage/delete-book(book=${book.id})}">Delete</a>
+        </li>
+      </ul>
     </div>
   </div>
 
