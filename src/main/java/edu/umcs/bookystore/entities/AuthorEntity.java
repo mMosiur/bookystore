@@ -57,4 +57,8 @@ public class AuthorEntity {
 		this.books = books;
 	}
 
+	public String getFullName() {
+		return String.format("%s %s", firstName, lastName);
+	}
+
 }

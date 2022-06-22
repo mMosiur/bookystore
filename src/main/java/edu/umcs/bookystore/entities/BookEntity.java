@@ -21,17 +21,17 @@ public class BookEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "author_id", nullable = false)
-	@Cascade(CascadeType.PERSIST)
+	@Cascade(CascadeType.MERGE)
 	private AuthorEntity author;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "publisher_id", nullable = false)
-	@Cascade(CascadeType.PERSIST)
+	@Cascade(CascadeType.MERGE)
 	private PublisherEntity publisher;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = true)
-	@Cascade(CascadeType.PERSIST)
+	@Cascade(CascadeType.MERGE)
 	private CategoryEntity category;
 
 	@Column(name = "price", nullable = false, precision = 2)

@@ -1,1 +1,24 @@
 <h1>browse books</h1>
+<form method="get">
+  <h2>Filter by</h2>
+  <select name="filterAuthor">
+    <option value="all">All</option>
+    <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}"
+      th:selected="${authorFilter != null && authorFilter.getId() == author.getId()}"></option>
+  </select>
+  <select name="filterPublisher">
+    <option value="all">All</option>
+    <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}"
+      th:selected="${publisherFilter != null && publisherFilter.getId() == publisher.getId()}">
+    </option>
+  </select>
+  <select name="filterCategory">
+    <option value="all">All</option>
+    <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
+      th:selected="${categoryFilter != null && categoryFilter.getId() == category.getId()}"></option>
+  </select>
+  <input type="submit" value="Apply filter">
+</form>
+<ul>
+  <li th:each="book: ${books}" th:text="${book.title}"></li>
+</ul>
