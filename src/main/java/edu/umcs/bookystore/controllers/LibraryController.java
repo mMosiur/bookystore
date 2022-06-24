@@ -2,6 +2,7 @@ package edu.umcs.bookystore.controllers;
 
 import java.util.List;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -123,6 +124,11 @@ public class LibraryController {
 		return template("manage");
 	}
 
+	@GetMapping("/manage/create-author")
+	public String getCreateAuthor(Model model) {
+		throw new NotYetImplementedException();
+	}
+
 	@PostMapping("/manage/create-author")
 	public String postCreateAuthor(Model model,
 			@RequestParam String firstName,
@@ -134,6 +140,11 @@ public class LibraryController {
 		author = this.authorRepository.save(author);
 		model.addAttribute("author", author);
 		return template("operation-successful");
+	}
+
+	@GetMapping("/manage/create-publisher")
+	public String getCreatePublisher(Model model) {
+		throw new NotYetImplementedException();
 	}
 
 	@PostMapping("/manage/create-publisher")
@@ -148,6 +159,11 @@ public class LibraryController {
 		return template("operation-successful");
 	}
 
+	@GetMapping("/manage/create-category")
+	public String getCreateCategory(Model model) {
+		throw new NotYetImplementedException();
+	}
+
 	@PostMapping("/manage/create-category")
 	public String postCreateCategory(Model model,
 			@RequestParam String name) {
@@ -158,6 +174,11 @@ public class LibraryController {
 		category = this.categoryRepository.save(category);
 		model.addAttribute("category", category);
 		return template("operation-successful");
+	}
+
+	@GetMapping("/manage/create-book")
+	public String getCreateBook(Model model) {
+		throw new NotYetImplementedException();
 	}
 
 	@PostMapping("/manage/create-book")
