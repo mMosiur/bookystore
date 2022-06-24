@@ -24,18 +24,18 @@ import edu.umcs.bookystore.repositories.CategoryRepository;
 import edu.umcs.bookystore.repositories.PublisherRepository;
 
 @Controller
-@RequestMapping("/books")
-public class BooksController {
+@RequestMapping("/library")
+public class LibraryController {
 
-	private static final String TEMPLATES_DIRECTORY = "books";
-	private static final Logger logger = LoggerFactory.getLogger(BooksController.class);
+	private static final String TEMPLATES_DIRECTORY = "library";
+	private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
 
 	private final BookRepository bookRepository;
 	private final AuthorRepository authorRepository;
 	private final PublisherRepository publisherRepository;
 	private final CategoryRepository categoryRepository;
 
-	public BooksController(
+	public LibraryController(
 			BookRepository bookRepository,
 			AuthorRepository authorRepository,
 			PublisherRepository publisherRepository,
