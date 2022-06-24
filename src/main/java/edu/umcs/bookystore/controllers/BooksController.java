@@ -7,10 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.umcs.bookystore.dtos.BookDto;
 import edu.umcs.bookystore.entities.AuthorEntity;
 import edu.umcs.bookystore.entities.BookEntity;
 import edu.umcs.bookystore.entities.CategoryEntity;
@@ -201,6 +204,68 @@ public class BooksController {
 		}
 		this.bookRepository.delete(bookEntity);
 		return template("operation-successful");
+	}
+
+	@GetMapping("/manage/update-book/{id}")
+	public String getUpdateBook(Model model, @PathVariable long id) {
+		logger.info("GET update book endpoint called");
+		model.addAttribute("operationType", "update");
+		model.addAttribute("entityType", "book");
+		BookEntity book = this.bookRepository.findById(id).orElse(null);
+		if (book == null) {
+			model.addAttribute("error", "Book not found");
+			return template("operation-failed");
+		}
+		BookDto bookDto = new BookDto(
+				book.getTitle(),
+				book.getAuthor().getId(),
+				book.getPublisher().getId(),
+				book.getCategory().getId(),
+				book.getPrice(),
+				book.getStock());
+		model.addAttribute("book", bookDto);
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("update");
+	}
+
+	@PostMapping("/manage/update-book/{id}")
+	public String postUpdateBook(Model model, @PathVariable long id, @ModelAttribute BookDto book) {
+		logger.info("POST update book endpoint called");
+		BookEntity bookEntity = this.bookRepository.findById(id).orElse(null);
+		if (bookEntity == null) {
+			model.addAttribute("error", "Book not found");
+			return template("operation-failed");
+		}
+		AuthorEntity authorEntity = this.authorRepository.findById(book.getAuthorId()).orElse(null);
+		if (authorEntity == null) {
+			model.addAttribute("error", "Author not found");
+			return template("operation-failed");
+		}
+		PublisherEntity publisherEntity = this.publisherRepository.findById(book.getPublisherId()).orElse(null);
+		if (publisherEntity == null) {
+			model.addAttribute("error", "Publisher not found");
+			return template("operation-failed");
+		}
+		CategoryEntity categoryEntity = this.categoryRepository.findById(book.getCategoryId()).orElse(null);
+		if (categoryEntity == null) {
+			model.addAttribute("error", "Category not found");
+			return template("operation-failed");
+		}
+		bookEntity.setTitle(book.getTitle());
+		bookEntity.setAuthor(authorEntity);
+		bookEntity.setPublisher(publisherEntity);
+		bookEntity.setCategory(categoryEntity);
+		bookEntity.setPrice(book.getPrice());
+		bookEntity.setStock(book.getStock());
+		model.addAttribute("book", book);
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		this.bookRepository.flush();
+		model.addAttribute("successMessage", "Book updated successfully");
+		return template("update");
 	}
 
 }
