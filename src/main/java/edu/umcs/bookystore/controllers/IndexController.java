@@ -14,7 +14,7 @@ public class IndexController {
 
 	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-	@GetMapping(value = "/")
+	@GetMapping("/")
 	public String getIndex(Model model) {
 		logger.debug("Index endpoint called");
 		var auth = SecurityContextHolder.getContext().getAuthentication();

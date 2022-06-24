@@ -47,7 +47,7 @@ public class BooksController {
 		return String.format("%s/%s", TEMPLATES_DIRECTORY, name);
 	}
 
-	@GetMapping(value = "/browse")
+	@GetMapping("/browse")
 	public String getBrowse(Model model,
 			@RequestParam(defaultValue = "all") String filterAuthor,
 			@RequestParam(defaultValue = "all") String filterPublisher,
@@ -110,7 +110,7 @@ public class BooksController {
 		return true;
 	}
 
-	@GetMapping(value = "/manage")
+	@GetMapping("/manage")
 	public String getManage(Model model) {
 		logger.debug("Manage books endpoint called");
 		model.addAttribute("authors", this.authorRepository.findAll());
@@ -120,7 +120,7 @@ public class BooksController {
 		return template("manage");
 	}
 
-	@PostMapping(value = "/manage/create-author")
+	@PostMapping("/manage/create-author")
 	public String postCreateAuthor(Model model,
 			@RequestParam String firstName,
 			@RequestParam String lastName) {
@@ -133,7 +133,7 @@ public class BooksController {
 		return template("operation-successful");
 	}
 
-	@PostMapping(value = "/manage/create-publisher")
+	@PostMapping("/manage/create-publisher")
 	public String postCreatePublisher(Model model,
 			@RequestParam String name) {
 		logger.info("POST create publisher endpoint called");
@@ -145,7 +145,7 @@ public class BooksController {
 		return template("operation-successful");
 	}
 
-	@PostMapping(value = "/manage/create-category")
+	@PostMapping("/manage/create-category")
 	public String postCreateCategory(Model model,
 			@RequestParam String name) {
 		logger.info("POST create category endpoint called");
@@ -157,7 +157,7 @@ public class BooksController {
 		return template("operation-successful");
 	}
 
-	@PostMapping(value = "/manage/create-book")
+	@PostMapping("/manage/create-book")
 	public String postCreateBook(Model model,
 			@RequestParam String title,
 			@RequestParam long author,
@@ -189,7 +189,7 @@ public class BooksController {
 		return template("operation-successful");
 	}
 
-	@GetMapping(value = "/manage/delete-book")
+	@GetMapping("/manage/delete-book")
 	public String getDeleteBook(Model model, @RequestParam long book) {
 		logger.info("POST delete book endpoint called");
 		model.addAttribute("operationType", "delete");
