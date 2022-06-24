@@ -43,6 +43,12 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 	@Value("${spring.security.user.password}")
 	public String DEFAULT_ADMIN_PASSWORD;
 
+	@Value("${spring.security.user.firstName}")
+	public String DEFAULT_ADMIN_FIRST_NAME;
+
+	@Value("${spring.security.user.lastName}")
+	public String DEFAULT_ADMIN_LAST_NAME;
+
 	@Value("${spring.security.user.roles}")
 	public List<String> DEFAULT_ADMIN_ROLES;
 
@@ -89,7 +95,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		}
 		UserDto admin = new UserDto(
 				DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD,
-				null, null);
+				DEFAULT_ADMIN_FIRST_NAME, DEFAULT_ADMIN_LAST_NAME);
 		Set<String> roles = DEFAULT_ADMIN_ROLES
 				.stream()
 				.map(role -> role.toUpperCase())
