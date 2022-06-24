@@ -110,24 +110,28 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		CategoryEntity category = new CategoryEntity("Fantasy");
 		category = this.categoryRepository.save(category);
 		double price = 35.38;
+		int stock = 10;
 		BookEntity book = new BookEntity(
 				title,
 				author,
 				publisher,
 				category,
-				price);
+				price,
+				stock);
 		book = this.bookRepository.save(book);
 		logger.info("Book " + book.getTitle() + " saved.");
 		title = "The Lord of the Rings";
 		author = new AuthorEntity("J.R.R.", "Tolkien");
 		author = this.authorRepository.save(author);
 		price = 39.99;
+		stock = 6;
 		book = new BookEntity(
 				title,
 				author,
 				publisher,
 				category,
-				price);
+				price,
+				stock);
 		book = this.bookRepository.save(book);
 		logger.info("Book " + book.getTitle() + " saved.");
 	}

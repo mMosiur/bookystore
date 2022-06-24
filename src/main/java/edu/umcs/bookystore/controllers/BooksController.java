@@ -163,7 +163,8 @@ public class BooksController {
 			@RequestParam long author,
 			@RequestParam long publisher,
 			@RequestParam long category,
-			@RequestParam double price) {
+			@RequestParam double price,
+			@RequestParam int stock) {
 		logger.info("POST create book endpoint called");
 		model.addAttribute("operationType", "create");
 		model.addAttribute("entityType", "book");
@@ -182,7 +183,7 @@ public class BooksController {
 			model.addAttribute("error", "Category not found");
 			return template("operation-failed");
 		}
-		BookEntity book = new BookEntity(title, authorEntity, publisherEntity, categoryEntity, price);
+		BookEntity book = new BookEntity(title, authorEntity, publisherEntity, categoryEntity, price, stock);
 		book = this.bookRepository.save(book);
 		model.addAttribute("book", book);
 		return template("operation-successful");

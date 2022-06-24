@@ -22,10 +22,17 @@ public class AuthorEntity {
 	@OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
 	private Set<BookEntity> books;
 
-	public AuthorEntity() { }
+	public AuthorEntity() {
+	}
 
 	public AuthorEntity(String firstName, String lastName) {
+		if (firstName == null || firstName.isEmpty()) {
+			throw new IllegalArgumentException("First name cannot be null or empty");
+		}
 		this.firstName = firstName;
+		if (lastName == null || lastName.isEmpty()) {
+			throw new IllegalArgumentException("Last name cannot be null or empty");
+		}
 		this.lastName = lastName;
 	}
 
@@ -41,6 +48,11 @@ public class AuthorEntity {
 		return lastName;
 	}
 
+	@Transient
+	public String getFullName() {
+		return String.format("%s %s", firstName, lastName);
+	}
+
 	public Set<BookEntity> getBooks() {
 		return books;
 	}
@@ -51,14 +63,6 @@ public class AuthorEntity {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public void setBooks(Set<BookEntity> books) {
-		this.books = books;
-	}
-
-	public String getFullName() {
-		return String.format("%s %s", firstName, lastName);
 	}
 
 }

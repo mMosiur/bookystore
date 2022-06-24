@@ -1,7 +1,5 @@
 package edu.umcs.bookystore.entities;
 
-import java.util.Set;
-
 import javax.persistence.*;
 
 import org.hibernate.annotations.Cascade;
@@ -35,21 +33,40 @@ public class BookEntity {
 	private CategoryEntity category;
 
 	@Column(name = "price", nullable = false, precision = 2)
-	private double price;
+	private Double price;
 
-	@OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-	private Set<StockItemEntity> stock;
+	@Column(name = "stock", nullable = false)
+	private Integer stock;
 
 	public BookEntity() {
 	}
 
 	public BookEntity(String title, AuthorEntity author, PublisherEntity publisher, CategoryEntity category,
-			double price) {
+			double price, int stock) {
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("Title cannot be null or empty");
+		}
 		this.title = title;
+		if (author == null) {
+			throw new IllegalArgumentException("Author cannot be null");
+		}
 		this.author = author;
+		if (publisher == null) {
+			throw new IllegalArgumentException("Publisher cannot be null");
+		}
 		this.publisher = publisher;
+		if (category == null) {
+			throw new IllegalArgumentException("Category cannot be null");
+		}
 		this.category = category;
+		if (price < 0) {
+			throw new IllegalArgumentException("Price cannot be negative");
+		}
 		this.price = price;
+		if (stock < 0) {
+			throw new IllegalArgumentException("Stock cannot be negative");
+		}
+		this.stock = stock;
 	}
 
 	public Long getId() {
@@ -72,35 +89,53 @@ public class BookEntity {
 		return category;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public Set<StockItemEntity> getStock() {
+	public Integer getStock() {
 		return stock;
 	}
 
 	public void setTitle(String title) {
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("Title cannot be null or empty");
+		}
 		this.title = title;
 	}
 
 	public void setAuthor(AuthorEntity author) {
+		if (author == null) {
+			throw new IllegalArgumentException("Author cannot be null");
+		}
 		this.author = author;
 	}
 
 	public void setPublisher(PublisherEntity publisher) {
+		if (publisher == null) {
+			throw new IllegalArgumentException("Publisher cannot be null");
+		}
 		this.publisher = publisher;
 	}
 
 	public void setCategory(CategoryEntity category) {
+		if (category == null) {
+			throw new IllegalArgumentException("Category cannot be null");
+		}
 		this.category = category;
 	}
 
 	public void setPrice(double price) {
+		if (price < 0) {
+			throw new IllegalArgumentException("Price cannot be negative");
+		}
 		this.price = price;
 	}
 
-	public void setStock(Set<StockItemEntity> stock) {
+	public void setStock(int stock) {
+		if (stock < 0) {
+			throw new IllegalArgumentException("Stock cannot be negative");
+		}
 		this.stock = stock;
 	}
 

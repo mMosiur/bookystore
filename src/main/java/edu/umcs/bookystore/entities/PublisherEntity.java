@@ -23,6 +23,9 @@ public class PublisherEntity {
 	}
 
 	public PublisherEntity(String name) {
+		if (name == null || name.isEmpty()) {
+			throw new IllegalArgumentException("Name cannot be null or empty");
+		}
 		this.name = name;
 	}
 
@@ -39,11 +42,10 @@ public class PublisherEntity {
 	}
 
 	public void setName(String name) {
+		if (name == null || name.isEmpty()) {
+			throw new IllegalArgumentException("Name cannot be null or empty");
+		}
 		this.name = name;
-	}
-
-	public void setBooks(Set<BookEntity> books) {
-		this.books = books;
 	}
 
 }
