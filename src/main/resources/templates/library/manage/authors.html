@@ -42,6 +42,7 @@
       <ul>
         <li th:each="author: ${authors}">
           <span th:text="${author.getFullName()}"></span>
+          <a th:href="@{/library/manage/authors(delete=${author.id})}">Delete</a>
         </li>
       </ul>
     </div>

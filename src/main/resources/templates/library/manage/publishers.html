@@ -40,7 +40,8 @@
       <h2>Publishers</h2>
       <ul>
         <li th:each="publisher: ${publishers}">
-          <span th:text="${publisher.getName()}"></span>
+          <span th:text="${publisher.name}"></span>
+          <a th:href="@{/library/manage/publishers(delete=${publisher.id})}">Delete</a>
         </li>
       </ul>
     </div>

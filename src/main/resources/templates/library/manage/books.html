@@ -53,7 +53,8 @@
       <h2>Books</h2>
       <ul>
         <li th:each="book: ${books}">
-          <span th:text="${book.getTitle()}"></span> by <span th:text="${book.getAuthor().getFullName()}"></span>
+          "<span th:text="${book.title}"></span>" by <span th:text="${book.author.getFullName()}"></span>
+          <a th:href="@{/library/manage/books(delete=${book.id})}">Delete</a>
         </li>
       </ul>
     </div>

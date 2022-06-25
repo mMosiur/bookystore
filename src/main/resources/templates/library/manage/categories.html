@@ -40,7 +40,8 @@
       <h2>Categories</h2>
       <ul>
         <li th:each="category: ${categories}">
-          <span th:text="${category.getName()}"></span>
+          <span th:text="${category.name}"></span>
+          <a th:href="@{/library/manage/categories(delete=${category.id})}">Delete</a>
         </li>
       </ul>
     </div>
