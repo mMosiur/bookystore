@@ -45,24 +45,24 @@ public class UserEntity {
 
 	public UserEntity(String username, String firstName, String lastName, String email, String passwordHash,
 			Set<RoleEntity> roles) {
-		if (username == null || username.isEmpty()) {
-			throw new IllegalArgumentException("Username cannot be null or empty");
+		if (username == null || username.isBlank()) {
+			throw new IllegalArgumentException("Username cannot be null or blank");
 		}
 		this.username = username;
-		if (firstName == null || firstName.isEmpty()) {
-			throw new IllegalArgumentException("First name cannot be null or empty");
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
 		this.firstName = firstName;
-		if (lastName == null || lastName.isEmpty()) {
-			throw new IllegalArgumentException("Last name cannot be null or empty");
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
 		this.lastName = lastName;
-		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("Email cannot be null or empty");
+		if (email == null || email.isBlank()) {
+			throw new IllegalArgumentException("Email cannot be null or blank");
 		}
 		this.email = email;
-		if (passwordHash == null || passwordHash.isEmpty()) {
-			throw new IllegalArgumentException("Password hash cannot be null or empty");
+		if (passwordHash == null || passwordHash.isBlank()) {
+			throw new IllegalArgumentException("Password hash cannot be null or blank");
 		}
 		this.passwordHash = passwordHash;
 		this.roles = roles;
@@ -77,8 +77,8 @@ public class UserEntity {
 	}
 
 	public void setUsername(String username) {
-		if (username == null || username.isEmpty()) {
-			throw new IllegalArgumentException("Username cannot be null or empty");
+		if (username == null || username.isBlank()) {
+			throw new IllegalArgumentException("Username cannot be null or blank");
 		}
 		this.username = username;
 	}
@@ -88,8 +88,8 @@ public class UserEntity {
 	}
 
 	public void setPasswordHash(String passwordHash) {
-		if (passwordHash == null || passwordHash.isEmpty()) {
-			throw new IllegalArgumentException("Password hash cannot be null or empty");
+		if (passwordHash == null || passwordHash.isBlank()) {
+			throw new IllegalArgumentException("Password hash cannot be null or blank");
 		}
 		this.passwordHash = passwordHash;
 	}
@@ -99,8 +99,8 @@ public class UserEntity {
 	}
 
 	public void setEmail(String email) {
-		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("Email cannot be null or empty");
+		if (email == null || email.isBlank()) {
+			throw new IllegalArgumentException("Email cannot be null or blank");
 		}
 		this.email = email;
 	}
@@ -110,8 +110,8 @@ public class UserEntity {
 	}
 
 	public void setFirstName(String firstName) {
-		if (firstName == null || firstName.isEmpty()) {
-			throw new IllegalArgumentException("First name cannot be null or empty");
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
 		this.firstName = firstName;
 	}
@@ -121,8 +121,8 @@ public class UserEntity {
 	}
 
 	public void setLastName(String lastName) {
-		if (lastName == null || lastName.isEmpty()) {
-			throw new IllegalArgumentException("Last name cannot be null or empty");
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
 		this.lastName = lastName;
 	}

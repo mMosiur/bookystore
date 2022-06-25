@@ -23,8 +23,8 @@ public class PublisherEntity {
 	}
 
 	public PublisherEntity(String name) {
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be null or empty");
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
 		this.name = name;
 	}
@@ -42,8 +42,8 @@ public class PublisherEntity {
 	}
 
 	public void setName(String name) {
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be null or empty");
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
 		this.name = name;
 	}

@@ -23,8 +23,8 @@ public class CategoryEntity {
 	}
 
 	public CategoryEntity(String name) {
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be null or empty");
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
 		this.name = name;
 	}
@@ -42,8 +42,8 @@ public class CategoryEntity {
 	}
 
 	public void setName(String name) {
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be null or empty");
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
 		this.name = name;
 	}

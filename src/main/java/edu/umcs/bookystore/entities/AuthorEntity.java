@@ -26,12 +26,12 @@ public class AuthorEntity {
 	}
 
 	public AuthorEntity(String firstName, String lastName) {
-		if (firstName == null || firstName.isEmpty()) {
-			throw new IllegalArgumentException("First name cannot be null or empty");
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
 		this.firstName = firstName;
-		if (lastName == null || lastName.isEmpty()) {
-			throw new IllegalArgumentException("Last name cannot be null or empty");
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
 		this.lastName = lastName;
 	}

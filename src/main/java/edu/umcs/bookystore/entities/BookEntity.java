@@ -43,8 +43,8 @@ public class BookEntity {
 
 	public BookEntity(String title, AuthorEntity author, PublisherEntity publisher, CategoryEntity category,
 			double price, int stock) {
-		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title cannot be null or empty");
+		if (title == null || title.isBlank()) {
+			throw new IllegalArgumentException("Title cannot be null or blank");
 		}
 		this.title = title;
 		if (author == null) {
@@ -98,8 +98,8 @@ public class BookEntity {
 	}
 
 	public void setTitle(String title) {
-		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title cannot be null or empty");
+		if (title == null || title.isBlank()) {
+			throw new IllegalArgumentException("Title cannot be null or blank");
 		}
 		this.title = title;
 	}
