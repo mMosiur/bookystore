@@ -1,7 +1,6 @@
 package edu.umcs.bookystore;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,12 +66,11 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		if (roleName == null || roleName.isBlank()) {
 			throw new IllegalArgumentException("Role name cannot be null or blank");
 		}
-		Optional<RoleEntity> roleSearch = this.roleRepository.findByName(roleName);
-		if (roleSearch.isPresent()) {
-			return roleSearch.get();
+		RoleEntity role = this.roleRepository.findByName(roleName).orElse(null);
+		if (role == null) {
+			role = new RoleEntity(roleName, roleDescription);
+			role = this.roleRepository.save(role);
 		}
-		RoleEntity role = new RoleEntity(roleName, roleDescription);
-		role = this.roleRepository.save(role);
 		return role;
 	}
 
@@ -108,6 +106,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 	}
 
 	private void assertDefaultAssortmentExists() {
+		if (this.bookRepository.count() > 0) {
+			return;
+		}
 		String title = "The Witcher: Last Wish";
 		AuthorEntity author = new AuthorEntity("Andrzej", "Sapkowski");
 		author = this.authorRepository.save(author);
