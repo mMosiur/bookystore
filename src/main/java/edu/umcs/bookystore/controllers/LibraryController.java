@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,10 +129,30 @@ public class LibraryController {
 	}
 
 	@GetMapping("/manage/authors")
-	public String getManageAuthors(Model model) {
+	public String getManageAuthors(Model model, @RequestParam(required = false) Long delete) {
 		logger.debug("GET manage authors endpoint called");
-		AuthorDto author = new AuthorDto();
-		model.addAttribute("newAuthor", author);
+		AuthorDto newAuthor = new AuthorDto();
+		model.addAttribute("newAuthor", newAuthor);
+		if (delete != null) {
+			try {
+				AuthorEntity author = this.authorRepository.findById(delete).get();
+				this.authorRepository.delete(author);
+				String successMessage = String.format("Author %s deleted", author.getFullName());
+				model.addAttribute("successMessage", successMessage);
+			} catch (NoSuchElementException e) {
+				logger.error("Error deleting author", e);
+				String errorMessage = "Error deleting author, given author does not exist";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (DataIntegrityViolationException e) {
+				logger.error("Error deleting author", e);
+				String errorMessage = "Cannot delete given author, it is used by some books";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (Exception e) {
+				logger.error("Error deleting author", e);
+				String errorMessage = String.format("Error while deleting an author: %s", e.getMessage());
+				model.addAttribute("errorMessage", errorMessage);
+			}
+		}
 		model.addAttribute("authors", this.authorRepository.findAll());
 		return template("manage/authors");
 	}
@@ -159,10 +180,30 @@ public class LibraryController {
 	}
 
 	@GetMapping("/manage/publishers")
-	public String getManagePublishers(Model model) {
+	public String getManagePublishers(Model model, @RequestParam(required = false) Long delete) {
 		logger.debug("GET manage publishers endpoint called");
-		PublisherDto publisher = new PublisherDto();
-		model.addAttribute("newPublisher", publisher);
+		PublisherDto newPublisher = new PublisherDto();
+		model.addAttribute("newPublisher", newPublisher);
+		if (delete != null) {
+			try {
+				PublisherEntity publisher = this.publisherRepository.findById(delete).get();
+				this.publisherRepository.delete(publisher);
+				String successMessage = String.format("Publisher %s deleted", publisher.getName());
+				model.addAttribute("successMessage", successMessage);
+			} catch (NoSuchElementException e) {
+				logger.error("Error deleting publisher", e);
+				String errorMessage = "Error deleting publisher, given publisher does not exist";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (DataIntegrityViolationException e) {
+				logger.error("Error deleting publisher", e);
+				String errorMessage = "Cannot delete given publisher, it is used by some books";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (Exception e) {
+				logger.error("Error deleting publisher", e);
+				String errorMessage = String.format("Error while deleting a publisher: %s", e.getMessage());
+				model.addAttribute("errorMessage", errorMessage);
+			}
+		}
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		return template("manage/publishers");
 	}
@@ -188,10 +229,30 @@ public class LibraryController {
 	}
 
 	@GetMapping("/manage/categories")
-	public String getManageCategories(Model model) {
+	public String getManageCategories(Model model, @RequestParam(required = false) Long delete) {
 		logger.debug("GET manage categories endpoint called");
-		CategoryDto category = new CategoryDto();
-		model.addAttribute("newCategory", category);
+		CategoryDto newCategory = new CategoryDto();
+		model.addAttribute("newCategory", newCategory);
+		if (delete != null) {
+			try {
+				CategoryEntity category = this.categoryRepository.findById(delete).get();
+				this.categoryRepository.delete(category);
+				String successMessage = String.format("Category %s deleted", category.getName());
+				model.addAttribute("successMessage", successMessage);
+			} catch (NoSuchElementException e) {
+				logger.error("Error deleting category", e);
+				String errorMessage = "Error deleting category, given category does not exist";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (DataIntegrityViolationException e) {
+				logger.error("Error deleting category", e);
+				String errorMessage = "Cannot delete given category, it is used by some books";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (Exception e) {
+				logger.error("Error deleting category", e);
+				String errorMessage = String.format("Error while deleting a category: %s", e.getMessage());
+				model.addAttribute("errorMessage", errorMessage);
+			}
+		}
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		return template("manage/categories");
 	}
@@ -217,10 +278,26 @@ public class LibraryController {
 	}
 
 	@GetMapping("/manage/books")
-	public String getManageBooks(Model model) {
+	public String getManageBooks(Model model, @RequestParam(required = false) Long delete) {
 		logger.debug("GET manage books endpoint called");
-		BookDto book = new BookDto();
-		model.addAttribute("newBook", book);
+		BookDto newBook = new BookDto();
+		model.addAttribute("newBook", newBook);
+		if (delete != null) {
+			try {
+				BookEntity book = this.bookRepository.findById(delete).get();
+				this.bookRepository.delete(book);
+				String successMessage = String.format("Book \"%s\" deleted", book.getTitle());
+				model.addAttribute("successMessage", successMessage);
+			} catch (NoSuchElementException e) {
+				logger.error("Error deleting book", e);
+				String errorMessage = "Error deleting book, given book does not exist";
+				model.addAttribute("errorMessage", errorMessage);
+			} catch (Exception e) {
+				logger.error("Error deleting book", e);
+				String errorMessage = String.format("Error while deleting a book: %s", e.getMessage());
+				model.addAttribute("errorMessage", errorMessage);
+			}
+		}
 		model.addAttribute("books", this.bookRepository.findAll());
 		model.addAttribute("authors", this.authorRepository.findAll());
 		model.addAttribute("publishers", this.publisherRepository.findAll());
@@ -272,20 +349,6 @@ public class LibraryController {
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		return template("manage/books");
-	}
-
-	@GetMapping("/manage/delete-book")
-	public String getDeleteBook(Model model, @RequestParam long book) {
-		logger.info("POST delete book endpoint called");
-		model.addAttribute("operationType", "delete");
-		model.addAttribute("entityType", "book");
-		BookEntity bookEntity = this.bookRepository.findById(book).orElse(null);
-		if (bookEntity == null) {
-			model.addAttribute("error", "Book not found");
-			return template("operation-failed");
-		}
-		this.bookRepository.delete(bookEntity);
-		return template("operation-successful");
 	}
 
 	@GetMapping("/manage/update-book/{id}")
