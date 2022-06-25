@@ -10,6 +10,8 @@
 </head>
 
 <body>
+  <nav th:replace="fragments/header :: header"></nav>
+
   <h1>Registration</h1>
   <div sec:authorize="isAuthenticated()">
     <p class="alert alert-warning" role="alert">

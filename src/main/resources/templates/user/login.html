@@ -10,6 +10,8 @@
 </head>
 
 <body>
+  <nav th:replace="fragments/header :: header"></nav>
+
   <h1>Please Log In</h1>
   <div th:if="${param.error}" class="alert alert-danger" role="alert">
     Invalid username and password.
