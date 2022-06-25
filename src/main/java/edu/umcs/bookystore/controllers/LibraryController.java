@@ -1,8 +1,8 @@
 package edu.umcs.bookystore.controllers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.umcs.bookystore.dtos.AuthorDto;
 import edu.umcs.bookystore.dtos.BookDto;
+import edu.umcs.bookystore.dtos.CategoryDto;
+import edu.umcs.bookystore.dtos.PublisherDto;
 import edu.umcs.bookystore.entities.AuthorEntity;
 import edu.umcs.bookystore.entities.BookEntity;
 import edu.umcs.bookystore.entities.CategoryEntity;
@@ -121,96 +124,154 @@ public class LibraryController {
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		model.addAttribute("books", this.bookRepository.findAll());
-		return template("manage");
+		return template("manage/index");
 	}
 
-	@GetMapping("/manage/create-author")
-	public String getCreateAuthor(Model model) {
-		throw new NotYetImplementedException();
+	@GetMapping("/manage/authors")
+	public String getManageAuthors(Model model) {
+		logger.debug("GET manage authors endpoint called");
+		AuthorDto author = new AuthorDto();
+		model.addAttribute("newAuthor", author);
+		model.addAttribute("authors", this.authorRepository.findAll());
+		return template("manage/authors");
 	}
 
-	@PostMapping("/manage/create-author")
-	public String postCreateAuthor(Model model,
-			@RequestParam String firstName,
-			@RequestParam String lastName) {
-		logger.info("POST create author endpoint called");
-		model.addAttribute("operationType", "create");
-		model.addAttribute("entityType", "author");
-		AuthorEntity author = new AuthorEntity(firstName, lastName);
-		author = this.authorRepository.save(author);
-		model.addAttribute("author", author);
-		return template("operation-successful");
-	}
-
-	@GetMapping("/manage/create-publisher")
-	public String getCreatePublisher(Model model) {
-		throw new NotYetImplementedException();
-	}
-
-	@PostMapping("/manage/create-publisher")
-	public String postCreatePublisher(Model model,
-			@RequestParam String name) {
-		logger.info("POST create publisher endpoint called");
-		model.addAttribute("operationType", "create");
-		model.addAttribute("entityType", "publisher");
-		PublisherEntity publisher = new PublisherEntity(name);
-		publisher = this.publisherRepository.save(publisher);
-		model.addAttribute("publisher", publisher);
-		return template("operation-successful");
-	}
-
-	@GetMapping("/manage/create-category")
-	public String getCreateCategory(Model model) {
-		throw new NotYetImplementedException();
-	}
-
-	@PostMapping("/manage/create-category")
-	public String postCreateCategory(Model model,
-			@RequestParam String name) {
-		logger.info("POST create category endpoint called");
-		model.addAttribute("operationType", "create");
-		model.addAttribute("entityType", "category");
-		CategoryEntity category = new CategoryEntity(name);
-		category = this.categoryRepository.save(category);
-		model.addAttribute("category", category);
-		return template("operation-successful");
-	}
-
-	@GetMapping("/manage/create-book")
-	public String getCreateBook(Model model) {
-		throw new NotYetImplementedException();
-	}
-
-	@PostMapping("/manage/create-book")
-	public String postCreateBook(Model model,
-			@RequestParam String title,
-			@RequestParam long author,
-			@RequestParam long publisher,
-			@RequestParam long category,
-			@RequestParam double price,
-			@RequestParam int stock) {
-		logger.info("POST create book endpoint called");
-		model.addAttribute("operationType", "create");
-		model.addAttribute("entityType", "book");
-		AuthorEntity authorEntity = this.authorRepository.findById(author).orElse(null);
-		if (authorEntity == null) {
-			model.addAttribute("error", "Author not found");
-			return template("operation-failed");
+	@PostMapping("/manage/authors")
+	public String postManageAuthors(Model model, @ModelAttribute AuthorDto newAuthor) {
+		logger.info("POST manage authors endpoint called");
+		try {
+			AuthorEntity authorEntity = new AuthorEntity(
+					newAuthor.getFirstName(),
+					newAuthor.getLastName());
+			authorEntity = this.authorRepository.save(authorEntity);
+			newAuthor.setFirstName(authorEntity.getFirstName());
+			newAuthor.setLastName(authorEntity.getLastName());
+			String successMessage = String.format("Author \"%s\" created", authorEntity.getFullName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (Exception e) {
+			logger.error("Error creating author", e);
+			String errorMessage = String.format("Error creating author: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
-		PublisherEntity publisherEntity = this.publisherRepository.findById(publisher).orElse(null);
-		if (publisherEntity == null) {
-			model.addAttribute("error", "Publisher not found");
-			return template("operation-failed");
+		model.addAttribute("newAuthor", newAuthor);
+		model.addAttribute("authors", this.authorRepository.findAll());
+		return template("manage/authors");
+	}
+
+	@GetMapping("/manage/publishers")
+	public String getManagePublishers(Model model) {
+		logger.debug("GET manage publishers endpoint called");
+		PublisherDto publisher = new PublisherDto();
+		model.addAttribute("newPublisher", publisher);
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		return template("manage/publishers");
+	}
+
+	@PostMapping("/manage/publishers")
+	public String postManagePublishers(Model model, @ModelAttribute PublisherDto newPublisher) {
+		logger.info("POST manage publishers endpoint called");
+		try {
+			PublisherEntity publisherEntity = new PublisherEntity(
+					newPublisher.getName());
+			publisherEntity = this.publisherRepository.save(publisherEntity);
+			newPublisher.setName(publisherEntity.getName());
+			String successMessage = String.format("Publisher \"%s\" created", publisherEntity.getName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (Exception e) {
+			logger.error("Error creating publisher", e);
+			String errorMessage = String.format("Error creating author: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
-		CategoryEntity categoryEntity = this.categoryRepository.findById(category).orElse(null);
-		if (categoryEntity == null) {
-			model.addAttribute("error", "Category not found");
-			return template("operation-failed");
+		model.addAttribute("newPublisher", newPublisher);
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		return template("manage/publishers");
+	}
+
+	@GetMapping("/manage/categories")
+	public String getManageCategories(Model model) {
+		logger.debug("GET manage categories endpoint called");
+		CategoryDto category = new CategoryDto();
+		model.addAttribute("newCategory", category);
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("manage/categories");
+	}
+
+	@PostMapping("/manage/categories")
+	public String postManageCategories(Model model, @ModelAttribute CategoryDto newCategory) {
+		logger.info("POST manage categories endpoint called");
+		try {
+			CategoryEntity categoryEntity = new CategoryEntity(
+					newCategory.getName());
+			categoryEntity = this.categoryRepository.save(categoryEntity);
+			newCategory.setName(categoryEntity.getName());
+			String successMessage = String.format("Category \"%s\" created", categoryEntity.getName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (Exception e) {
+			logger.error("Error creating category", e);
+			String errorMessage = String.format("Error creating category: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
-		BookEntity book = new BookEntity(title, authorEntity, publisherEntity, categoryEntity, price, stock);
-		book = this.bookRepository.save(book);
-		model.addAttribute("book", book);
-		return template("operation-successful");
+		model.addAttribute("newCategory", newCategory);
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("manage/categories");
+	}
+
+	@GetMapping("/manage/books")
+	public String getManageBooks(Model model) {
+		logger.debug("GET manage books endpoint called");
+		BookDto book = new BookDto();
+		model.addAttribute("newBook", book);
+		model.addAttribute("books", this.bookRepository.findAll());
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("manage/books");
+	}
+
+	@PostMapping("/manage/books")
+	public String postManageBooks(Model model, @ModelAttribute BookDto newBook) {
+		logger.debug("POST manage books endpoint called");
+		try {
+			AuthorEntity authorEntity = this.authorRepository.findById(newBook.getAuthorId()).orElse(null);
+			if (authorEntity == null) {
+				throw new NoSuchElementException("Author not found");
+			}
+			PublisherEntity publisherEntity = this.publisherRepository.findById(newBook.getPublisherId()).orElse(null);
+			if (publisherEntity == null) {
+				throw new NoSuchElementException("Publisher not found");
+			}
+			CategoryEntity categoryEntity = this.categoryRepository.findById(newBook.getCategoryId()).orElse(null);
+			if (categoryEntity == null) {
+				throw new NoSuchElementException("Category not found");
+			}
+			BookEntity bookEntity = new BookEntity(
+					newBook.getTitle(),
+					authorEntity,
+					publisherEntity,
+					categoryEntity,
+					newBook.getPrice(),
+					newBook.getStock());
+			bookEntity = this.bookRepository.save(bookEntity);
+			newBook.setTitle(bookEntity.getTitle());
+			newBook.setAuthorId(bookEntity.getAuthor().getId());
+			newBook.setPublisherId(bookEntity.getPublisher().getId());
+			newBook.setCategoryId(bookEntity.getCategory().getId());
+			newBook.setPrice(bookEntity.getPrice());
+			newBook.setStock(bookEntity.getStock());
+			String successMessage = String.format("Book \"%s\" by \"%s\" created",
+					bookEntity.getTitle(), authorEntity.getFullName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (Exception e) {
+			logger.error("Error creating book", e);
+			String errorMessage = String.format("Error creating book: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		model.addAttribute("newBook", newBook);
+		model.addAttribute("books", this.bookRepository.findAll());
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("manage/books");
 	}
 
 	@GetMapping("/manage/delete-book")
