@@ -48,19 +48,19 @@ public class UserEntity {
 		if (username == null || username.isBlank()) {
 			throw new IllegalArgumentException("Username cannot be null or blank");
 		}
-		this.username = username;
+		this.username = username.trim();
 		if (firstName == null || firstName.isBlank()) {
 			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 		if (lastName == null || lastName.isBlank()) {
 			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 		if (email == null || email.isBlank()) {
 			throw new IllegalArgumentException("Email cannot be null or blank");
 		}
-		this.email = email;
+		this.email = email.trim();
 		if (passwordHash == null || passwordHash.isBlank()) {
 			throw new IllegalArgumentException("Password hash cannot be null or blank");
 		}
@@ -80,7 +80,7 @@ public class UserEntity {
 		if (username == null || username.isBlank()) {
 			throw new IllegalArgumentException("Username cannot be null or blank");
 		}
-		this.username = username;
+		this.username = username.trim();
 	}
 
 	public String getPasswordHash() {
@@ -102,7 +102,7 @@ public class UserEntity {
 		if (email == null || email.isBlank()) {
 			throw new IllegalArgumentException("Email cannot be null or blank");
 		}
-		this.email = email;
+		this.email = email.trim();
 	}
 
 	public String getFirstName() {
@@ -113,7 +113,7 @@ public class UserEntity {
 		if (firstName == null || firstName.isBlank()) {
 			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 	}
 
 	public String getLastName() {
@@ -124,7 +124,7 @@ public class UserEntity {
 		if (lastName == null || lastName.isBlank()) {
 			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 	}
 
 	public Set<RoleEntity> getRoles() {

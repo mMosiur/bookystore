@@ -46,7 +46,7 @@ public class BookEntity {
 		if (title == null || title.isBlank()) {
 			throw new IllegalArgumentException("Title cannot be null or blank");
 		}
-		this.title = title;
+		this.title = title.trim();
 		if (author == null) {
 			throw new IllegalArgumentException("Author cannot be null");
 		}
@@ -101,7 +101,7 @@ public class BookEntity {
 		if (title == null || title.isBlank()) {
 			throw new IllegalArgumentException("Title cannot be null or blank");
 		}
-		this.title = title;
+		this.title = title.trim();
 	}
 
 	public void setAuthor(AuthorEntity author) {

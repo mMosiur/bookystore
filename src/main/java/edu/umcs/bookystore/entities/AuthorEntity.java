@@ -29,11 +29,11 @@ public class AuthorEntity {
 		if (firstName == null || firstName.isBlank()) {
 			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 		if (lastName == null || lastName.isBlank()) {
 			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 	}
 
 	public Long getId() {
@@ -61,14 +61,14 @@ public class AuthorEntity {
 		if (firstName == null || firstName.isBlank()) {
 			throw new IllegalArgumentException("First name cannot be null or blank");
 		}
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 	}
 
 	public void setLastName(String lastName) {
 		if (lastName == null || lastName.isBlank()) {
 			throw new IllegalArgumentException("Last name cannot be null or blank");
 		}
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 	}
 
 }

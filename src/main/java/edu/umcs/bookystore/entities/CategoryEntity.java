@@ -26,7 +26,7 @@ public class CategoryEntity {
 		if (name == null || name.isBlank()) {
 			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public Long getId() {
@@ -45,7 +45,7 @@ public class CategoryEntity {
 		if (name == null || name.isBlank()) {
 			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
-		this.name = name;
+		this.name = name.trim();
 	}
 
 }
