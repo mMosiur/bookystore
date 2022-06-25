@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,7 +64,7 @@ public class ManageAuthorsController {
 
 	@PostMapping
 	public String postManageAuthors(Model model, @ModelAttribute AuthorDto newAuthor) {
-		logger.info("POST manage authors endpoint called");
+		logger.debug("POST manage authors endpoint called");
 		try {
 			AuthorEntity authorEntity = new AuthorEntity(
 					newAuthor.getFirstName(),
@@ -81,6 +82,48 @@ public class ManageAuthorsController {
 		model.addAttribute("newAuthor", newAuthor);
 		model.addAttribute("authors", this.authorRepository.findAll());
 		return template("authors");
+	}
+
+	@GetMapping("/{id}/details")
+	public String getAuthorDetails(Model model, @PathVariable long id) {
+		logger.debug("GET author details endpoint called");
+		model.addAttribute("id", id);
+		AuthorEntity authorEntity = this.authorRepository.findById(id).orElse(null);
+		AuthorDto author = null;
+		if (authorEntity != null) {
+			author = new AuthorDto(
+					authorEntity.getFirstName(),
+					authorEntity.getLastName());
+		}
+		model.addAttribute("author", author);
+		return template("author-details");
+	}
+
+	@PostMapping("/{id}/details")
+	public String postAuthorDetails(Model model, @PathVariable long id, @ModelAttribute AuthorDto author) {
+		logger.debug("POST author details endpoint called");
+		model.addAttribute("id", id);
+		try {
+			AuthorEntity authorEntity = this.authorRepository.findById(id).get();
+			authorEntity.setFirstName(author.getFirstName());
+			authorEntity.setLastName(author.getLastName());
+			authorEntity = this.authorRepository.save(authorEntity);
+			author.setFirstName(authorEntity.getFirstName());
+			author.setLastName(authorEntity.getLastName());
+			String successMessage = "Author successfully updated";
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			author = null;
+		} catch (IllegalArgumentException e) {
+			String errorMessage = String.format("Error updating author: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error updating author", e);
+			String errorMessage = String.format("Error updating author: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		model.addAttribute("author", author);
+		return template("author-details");
 	}
 
 }

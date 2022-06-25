@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,7 +64,7 @@ public class ManageCategoriesController {
 
 	@PostMapping
 	public String postManageCategories(Model model, @ModelAttribute CategoryDto newCategory) {
-		logger.info("POST manage categories endpoint called");
+		logger.debug("POST manage categories endpoint called");
 		try {
 			CategoryEntity categoryEntity = new CategoryEntity(
 					newCategory.getName());
@@ -79,6 +80,44 @@ public class ManageCategoriesController {
 		model.addAttribute("newCategory", newCategory);
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		return template("categories");
+	}
+
+	@GetMapping("/{id}/details")
+	public String getCategoryDetails(Model model, @PathVariable long id) {
+		logger.debug("GET category details endpoint called");
+		model.addAttribute("id", id);
+		CategoryEntity categoryEntity = this.categoryRepository.findById(id).orElse(null);
+		CategoryDto category = null;
+		if (categoryEntity != null) {
+			category = new CategoryDto(categoryEntity.getName());
+		}
+		model.addAttribute("category", category);
+		return template("category-details");
+	}
+
+	@PostMapping("/{id}/details")
+	public String postCategoryDetails(Model model, @PathVariable long id, @ModelAttribute CategoryDto category) {
+		logger.debug("POST category details endpoint called");
+		model.addAttribute("id", id);
+		try {
+			CategoryEntity categoryEntity = this.categoryRepository.findById(id).get();
+			categoryEntity.setName(category.getName());
+			categoryEntity = this.categoryRepository.save(categoryEntity);
+			category.setName(categoryEntity.getName());
+			String successMessage = "Category successfully updated";
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			category = null;
+		} catch (IllegalArgumentException e) {
+			String errorMessage = String.format("Error updating category: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error updating category", e);
+			String errorMessage = String.format("Error updating category: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		model.addAttribute("category", category);
+		return template("category-details");
 	}
 
 }

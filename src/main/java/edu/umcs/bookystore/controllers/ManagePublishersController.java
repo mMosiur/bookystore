@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,7 +64,7 @@ public class ManagePublishersController {
 
 	@PostMapping
 	public String postManagePublishers(Model model, @ModelAttribute PublisherDto newPublisher) {
-		logger.info("POST manage publishers endpoint called");
+		logger.debug("POST manage publishers endpoint called");
 		try {
 			PublisherEntity publisherEntity = new PublisherEntity(
 					newPublisher.getName());
@@ -79,6 +80,44 @@ public class ManagePublishersController {
 		model.addAttribute("newPublisher", newPublisher);
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		return template("publishers");
+	}
+
+	@GetMapping("/{id}/details")
+	public String getPublisherDetails(Model model, @PathVariable long id) {
+		logger.debug("GET publisher details endpoint called");
+		model.addAttribute("id", id);
+		PublisherEntity publisherEntity = this.publisherRepository.findById(id).orElse(null);
+		PublisherDto publisher = null;
+		if (publisherEntity != null) {
+			publisher = new PublisherDto(publisherEntity.getName());
+		}
+		model.addAttribute("publisher", publisher);
+		return template("publisher-details");
+	}
+
+	@PostMapping("/{id}/details")
+	public String postPublisherDetails(Model model, @PathVariable long id, @ModelAttribute PublisherDto publisher) {
+		logger.debug("POST publisher details endpoint called");
+		model.addAttribute("id", id);
+		try {
+			PublisherEntity publisherEntity = this.publisherRepository.findById(id).get();
+			publisherEntity.setName(publisher.getName());
+			publisherEntity = this.publisherRepository.save(publisherEntity);
+			publisher.setName(publisherEntity.getName());
+			String successMessage = "Publisher successfully updated";
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			publisher = null;
+		} catch (IllegalArgumentException e) {
+			String errorMessage = String.format("Error updating publisher: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error updating publisher", e);
+			String errorMessage = String.format("Error updating publisher: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		model.addAttribute("publisher", publisher);
+		return template("publisher-details");
 	}
 
 }
