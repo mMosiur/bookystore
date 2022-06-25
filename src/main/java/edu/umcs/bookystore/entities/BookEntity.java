@@ -59,7 +59,7 @@ public class BookEntity {
 			throw new IllegalArgumentException("Category cannot be null");
 		}
 		this.category = category;
-		if (price < 0) {
+		if (price < 0.00) {
 			throw new IllegalArgumentException("Price cannot be negative");
 		}
 		this.price = price;
@@ -126,7 +126,7 @@ public class BookEntity {
 	}
 
 	public void setPrice(double price) {
-		if (price < 0) {
+		if (price < 0.00) {
 			throw new IllegalArgumentException("Price cannot be negative");
 		}
 		this.price = price;

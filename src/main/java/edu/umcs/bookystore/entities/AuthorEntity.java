@@ -58,10 +58,16 @@ public class AuthorEntity {
 	}
 
 	public void setFirstName(String firstName) {
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
+		}
 		this.firstName = firstName;
 	}
 
 	public void setLastName(String lastName) {
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
+		}
 		this.lastName = lastName;
 	}
 

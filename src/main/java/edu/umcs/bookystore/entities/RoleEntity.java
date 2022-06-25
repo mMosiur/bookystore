@@ -32,11 +32,18 @@ public class RoleEntity {
 	public RoleEntity() {
 	}
 
+	public RoleEntity(String name) {
+		this(name, null);
+	}
+
 	public RoleEntity(String name, String description) {
 		if (name == null || name.isBlank()) {
 			throw new IllegalArgumentException("Name cannot be null or blank");
 		}
 		this.name = name;
+		if (description != null && description.isBlank()) {
+			throw new IllegalArgumentException("Description cannot blank, set it to null instead if it is intentional");
+		}
 		this.description = description;
 	}
 
@@ -62,6 +69,9 @@ public class RoleEntity {
 	}
 
 	public void setDescription(String description) {
+		if (description != null && description.isBlank()) {
+			throw new IllegalArgumentException("Description cannot blank, set it to null instead if it is intentional");
+		}
 		this.description = description;
 	}
 
