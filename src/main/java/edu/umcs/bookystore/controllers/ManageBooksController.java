@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,5 +118,65 @@ public class ManageBooksController {
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		return template("books");
+	}
+
+	@GetMapping("/{id}/details")
+	public String getBookDetails(Model model, @PathVariable long id) {
+		logger.debug("GET book details endpoint called");
+		model.addAttribute("id", id);
+		BookEntity bookEntity = this.bookRepository.findById(id).orElse(null);
+		BookDto book = null;
+		if (bookEntity != null) {
+			book = new BookDto(
+					bookEntity.getTitle(),
+					bookEntity.getAuthor().getId(),
+					bookEntity.getPublisher().getId(),
+					bookEntity.getCategory().getId(),
+					bookEntity.getPrice(),
+					bookEntity.getStock());
+			model.addAttribute("authors", this.authorRepository.findAll());
+			model.addAttribute("publishers", this.publisherRepository.findAll());
+			model.addAttribute("categories", this.categoryRepository.findAll());
+		}
+		model.addAttribute("book", book);
+		return template("book-details");
+	}
+
+	@PostMapping("/{id}/details")
+	public String postBookDetails(Model model, @PathVariable long id, @ModelAttribute BookDto book) {
+		logger.debug("POST book details endpoint called");
+		model.addAttribute("id", id);
+		try {
+			BookEntity bookEntity = this.bookRepository.findById(id).get();
+			bookEntity.setTitle(book.getTitle());
+			bookEntity.setAuthor(this.authorRepository.findById(book.getAuthorId()).get());
+			bookEntity.setPublisher(this.publisherRepository.findById(book.getPublisherId()).get());
+			bookEntity.setCategory(this.categoryRepository.findById(book.getCategoryId()).get());
+			bookEntity.setPrice(book.getPrice());
+			bookEntity.setStock(book.getStock());
+			bookEntity = this.bookRepository.save(bookEntity);
+			book.setTitle(bookEntity.getTitle());
+			book.setAuthorId(bookEntity.getAuthor().getId());
+			book.setPublisherId(bookEntity.getPublisher().getId());
+			book.setCategoryId(bookEntity.getCategory().getId());
+			book.setPrice(bookEntity.getPrice());
+			book.setStock(bookEntity.getStock());
+			String successMessage = "Book successfully updated";
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			book = null;
+		} catch (IllegalArgumentException e) {
+			String errorMessage = String.format("Error updating book: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error updating book", e);
+			String errorMessage = String.format("Error updating book: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		model.addAttribute("book", book);
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("book-details");
 	}
 }
