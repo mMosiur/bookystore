@@ -22,11 +22,18 @@ public class AuthorEntity {
 	@OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
 	private Set<BookEntity> books;
 
-	public AuthorEntity() { }
+	public AuthorEntity() {
+	}
 
 	public AuthorEntity(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
+		}
+		this.firstName = firstName.trim();
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
+		}
+		this.lastName = lastName.trim();
 	}
 
 	public Long getId() {
@@ -41,24 +48,27 @@ public class AuthorEntity {
 		return lastName;
 	}
 
+	@Transient
+	public String getFullName() {
+		return String.format("%s %s", firstName, lastName);
+	}
+
 	public Set<BookEntity> getBooks() {
 		return books;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
+		}
+		this.firstName = firstName.trim();
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public void setBooks(Set<BookEntity> books) {
-		this.books = books;
-	}
-
-	public String getFullName() {
-		return String.format("%s %s", firstName, lastName);
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
+		}
+		this.lastName = lastName.trim();
 	}
 
 }

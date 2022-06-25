@@ -1,0 +1,14 @@
+{
+    "properties": [
+        {
+            "name": "spring.security.user.firstName",
+            "type": "java.lang.String",
+            "description": "First name for the default user name."
+        },
+        {
+            "name": "spring.security.user.lastName",
+            "type": "java.lang.String",
+            "description": "Last name for the default user name."
+        }
+    ]
+}

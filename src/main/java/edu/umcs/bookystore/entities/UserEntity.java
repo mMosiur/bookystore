@@ -45,10 +45,25 @@ public class UserEntity {
 
 	public UserEntity(String username, String firstName, String lastName, String email, String passwordHash,
 			Set<RoleEntity> roles) {
-		this.username = username;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
+		if (username == null || username.isBlank()) {
+			throw new IllegalArgumentException("Username cannot be null or blank");
+		}
+		this.username = username.trim();
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
+		}
+		this.firstName = firstName.trim();
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
+		}
+		this.lastName = lastName.trim();
+		if (email == null || email.isBlank()) {
+			throw new IllegalArgumentException("Email cannot be null or blank");
+		}
+		this.email = email.trim();
+		if (passwordHash == null || passwordHash.isBlank()) {
+			throw new IllegalArgumentException("Password hash cannot be null or blank");
+		}
 		this.passwordHash = passwordHash;
 		this.roles = roles;
 	}
@@ -62,7 +77,10 @@ public class UserEntity {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		if (username == null || username.isBlank()) {
+			throw new IllegalArgumentException("Username cannot be null or blank");
+		}
+		this.username = username.trim();
 	}
 
 	public String getPasswordHash() {
@@ -70,6 +88,9 @@ public class UserEntity {
 	}
 
 	public void setPasswordHash(String passwordHash) {
+		if (passwordHash == null || passwordHash.isBlank()) {
+			throw new IllegalArgumentException("Password hash cannot be null or blank");
+		}
 		this.passwordHash = passwordHash;
 	}
 
@@ -78,7 +99,10 @@ public class UserEntity {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		if (email == null || email.isBlank()) {
+			throw new IllegalArgumentException("Email cannot be null or blank");
+		}
+		this.email = email.trim();
 	}
 
 	public String getFirstName() {
@@ -86,7 +110,10 @@ public class UserEntity {
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		if (firstName == null || firstName.isBlank()) {
+			throw new IllegalArgumentException("First name cannot be null or blank");
+		}
+		this.firstName = firstName.trim();
 	}
 
 	public String getLastName() {
@@ -94,7 +121,10 @@ public class UserEntity {
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		if (lastName == null || lastName.isBlank()) {
+			throw new IllegalArgumentException("Last name cannot be null or blank");
+		}
+		this.lastName = lastName.trim();
 	}
 
 	public Set<RoleEntity> getRoles() {

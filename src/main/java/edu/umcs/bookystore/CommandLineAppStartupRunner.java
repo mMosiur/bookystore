@@ -43,6 +43,12 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 	@Value("${spring.security.user.password}")
 	public String DEFAULT_ADMIN_PASSWORD;
 
+	@Value("${spring.security.user.firstName}")
+	public String DEFAULT_ADMIN_FIRST_NAME;
+
+	@Value("${spring.security.user.lastName}")
+	public String DEFAULT_ADMIN_LAST_NAME;
+
 	@Value("${spring.security.user.roles}")
 	public List<String> DEFAULT_ADMIN_ROLES;
 
@@ -89,7 +95,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		}
 		UserDto admin = new UserDto(
 				DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD,
-				null, null);
+				DEFAULT_ADMIN_FIRST_NAME, DEFAULT_ADMIN_LAST_NAME);
 		Set<String> roles = DEFAULT_ADMIN_ROLES
 				.stream()
 				.map(role -> role.toUpperCase())
@@ -110,24 +116,28 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		CategoryEntity category = new CategoryEntity("Fantasy");
 		category = this.categoryRepository.save(category);
 		double price = 35.38;
+		int stock = 10;
 		BookEntity book = new BookEntity(
 				title,
 				author,
 				publisher,
 				category,
-				price);
+				price,
+				stock);
 		book = this.bookRepository.save(book);
 		logger.info("Book " + book.getTitle() + " saved.");
 		title = "The Lord of the Rings";
 		author = new AuthorEntity("J.R.R.", "Tolkien");
 		author = this.authorRepository.save(author);
 		price = 39.99;
+		stock = 6;
 		book = new BookEntity(
 				title,
 				author,
 				publisher,
 				category,
-				price);
+				price,
+				stock);
 		book = this.bookRepository.save(book);
 		logger.info("Book " + book.getTitle() + " saved.");
 	}

@@ -32,9 +32,23 @@ public class RoleEntity {
 	public RoleEntity() {
 	}
 
+	public RoleEntity(String name) {
+		this(name, null);
+	}
+
 	public RoleEntity(String name, String description) {
-		this.name = name;
-		this.description = description;
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
+		}
+		this.name = name.trim();
+		if (description != null) {
+			if (description.isBlank()) {
+				throw new IllegalArgumentException(
+						"Description cannot blank, set it to null instead if it is intentional");
+			} else {
+				this.description = description.trim();
+			}
+		}
 	}
 
 	// Getters and setters
@@ -48,7 +62,10 @@ public class RoleEntity {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
+		}
+		this.name = name.trim();
 	}
 
 	public String getDescription() {
@@ -56,14 +73,17 @@ public class RoleEntity {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		if (description == null) {
+			this.description = null;
+			return;
+		}
+		if (!description.isBlank()) {
+			this.description = description.trim();
+		}
+		throw new IllegalArgumentException("Description cannot blank, set it to null instead if it is intentional");
 	}
 
 	public Set<UserEntity> getUsers() {
 		return users;
-	}
-
-	public void setUsers(Set<UserEntity> users) {
-		this.users = users;
 	}
 }

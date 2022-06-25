@@ -23,7 +23,10 @@ public class CategoryEntity {
 	}
 
 	public CategoryEntity(String name) {
-		this.name = name;
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
+		}
+		this.name = name.trim();
 	}
 
 	public Long getId() {
@@ -39,11 +42,10 @@ public class CategoryEntity {
 	}
 
 	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setBooks(Set<BookEntity> books) {
-		this.books = books;
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("Name cannot be null or blank");
+		}
+		this.name = name.trim();
 	}
 
 }

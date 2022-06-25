@@ -38,14 +38,14 @@ public class UserController {
 
 	// @PostMapping("/login") handled by the default implementation of Spring Security
 
-	@GetMapping(value = "/register")
+	@GetMapping("/register")
 	public String getRegister(Model model) {
 		logger.debug("GET Register endpoint called");
 		model.addAttribute("user", new UserDto());
 		return template("register");
 	}
 
-	@PostMapping(value = "/register")
+	@PostMapping("/register")
 	public String postRegister(Model model, @ModelAttribute UserDto user) {
 		logger.debug("POST Register endpoint called");
 		boolean userCreatedSuccessfully = false;
