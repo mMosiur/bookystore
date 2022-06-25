@@ -89,6 +89,7 @@ public class ManageCategoriesController {
 		CategoryEntity categoryEntity = this.categoryRepository.findById(id).orElse(null);
 		CategoryDto category = null;
 		if (categoryEntity != null) {
+			model.addAttribute("books", categoryEntity.getBooks());
 			category = new CategoryDto(categoryEntity.getName());
 		}
 		model.addAttribute("category", category);
@@ -103,6 +104,7 @@ public class ManageCategoriesController {
 			CategoryEntity categoryEntity = this.categoryRepository.findById(id).get();
 			categoryEntity.setName(category.getName());
 			categoryEntity = this.categoryRepository.save(categoryEntity);
+			model.addAttribute("books", categoryEntity.getBooks());
 			category.setName(categoryEntity.getName());
 			String successMessage = "Category successfully updated";
 			model.addAttribute("successMessage", successMessage);

@@ -89,6 +89,7 @@ public class ManagePublishersController {
 		PublisherEntity publisherEntity = this.publisherRepository.findById(id).orElse(null);
 		PublisherDto publisher = null;
 		if (publisherEntity != null) {
+			model.addAttribute("books", publisherEntity.getBooks());
 			publisher = new PublisherDto(publisherEntity.getName());
 		}
 		model.addAttribute("publisher", publisher);
@@ -103,6 +104,7 @@ public class ManagePublishersController {
 			PublisherEntity publisherEntity = this.publisherRepository.findById(id).get();
 			publisherEntity.setName(publisher.getName());
 			publisherEntity = this.publisherRepository.save(publisherEntity);
+			model.addAttribute("books", publisherEntity.getBooks());
 			publisher.setName(publisherEntity.getName());
 			String successMessage = "Publisher successfully updated";
 			model.addAttribute("successMessage", successMessage);

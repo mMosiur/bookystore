@@ -91,6 +91,7 @@ public class ManageAuthorsController {
 		AuthorEntity authorEntity = this.authorRepository.findById(id).orElse(null);
 		AuthorDto author = null;
 		if (authorEntity != null) {
+			model.addAttribute("books", authorEntity.getBooks());
 			author = new AuthorDto(
 					authorEntity.getFirstName(),
 					authorEntity.getLastName());
@@ -108,6 +109,7 @@ public class ManageAuthorsController {
 			authorEntity.setFirstName(author.getFirstName());
 			authorEntity.setLastName(author.getLastName());
 			authorEntity = this.authorRepository.save(authorEntity);
+			model.addAttribute("books", authorEntity.getBooks());
 			author.setFirstName(authorEntity.getFirstName());
 			author.setLastName(authorEntity.getLastName());
 			String successMessage = "Author successfully updated";

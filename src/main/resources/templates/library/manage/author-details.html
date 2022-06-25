@@ -42,8 +42,15 @@
           <input type="submit" value="Save">
           <input type="reset" value="Reset changes">
         </form>
+        <h3>Author's books</h3>
+        <ul>
+          <li th:each="book: ${books}">
+            "<span th:text="${book.title}"></span>"
+            <a th:href="@{/library/manage/books(delete=${book.id})}">Delete</a>
+            <a th:href="@{/library/manage/books/{id}/details(id=${book.id})}">Details / Edit</a>
+          </li>
+        </ul>
       </div>
-
       <a th:href="@{/library/manage/authors}">Manage authors</a>
     </div>
   </div>
