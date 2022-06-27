@@ -69,9 +69,9 @@ public class ManagePublishersController {
 			PublisherEntity publisherEntity = new PublisherEntity(
 					newPublisher.getName());
 			publisherEntity = this.publisherRepository.save(publisherEntity);
-			newPublisher.setName(publisherEntity.getName());
 			String successMessage = String.format("Publisher \"%s\" created", publisherEntity.getName());
 			model.addAttribute("successMessage", successMessage);
+			newPublisher = new PublisherDto();
 		} catch (Exception e) {
 			logger.error("Error creating publisher", e);
 			String errorMessage = String.format("Error creating author: %s", e.getMessage());

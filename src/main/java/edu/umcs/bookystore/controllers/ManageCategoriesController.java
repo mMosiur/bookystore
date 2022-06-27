@@ -69,9 +69,9 @@ public class ManageCategoriesController {
 			CategoryEntity categoryEntity = new CategoryEntity(
 					newCategory.getName());
 			categoryEntity = this.categoryRepository.save(categoryEntity);
-			newCategory.setName(categoryEntity.getName());
 			String successMessage = String.format("Category \"%s\" created", categoryEntity.getName());
 			model.addAttribute("successMessage", successMessage);
+			newCategory = new CategoryDto();
 		} catch (Exception e) {
 			logger.error("Error creating category", e);
 			String errorMessage = String.format("Error creating category: %s", e.getMessage());

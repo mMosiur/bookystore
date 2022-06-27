@@ -70,10 +70,9 @@ public class ManageAuthorsController {
 					newAuthor.getFirstName(),
 					newAuthor.getLastName());
 			authorEntity = this.authorRepository.save(authorEntity);
-			newAuthor.setFirstName(authorEntity.getFirstName());
-			newAuthor.setLastName(authorEntity.getLastName());
 			String successMessage = String.format("Author \"%s\" created", authorEntity.getFullName());
 			model.addAttribute("successMessage", successMessage);
+			newAuthor = new AuthorDto();
 		} catch (Exception e) {
 			logger.error("Error creating author", e);
 			String errorMessage = String.format("Error creating author: %s", e.getMessage());
