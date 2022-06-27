@@ -52,4 +52,11 @@ public class CartController {
 		this.cart.add(addBook);
 		return getCart(model);
 	}
+
+	@PostMapping(params = "removeBook")
+	public String postRemoveFromCart(Model model, @RequestParam(name = "removeBook", required = true) long removeBook) {
+		logger.debug("POST remove from cart endpoint called");
+		this.cart.remove(removeBook);
+		return getCart(model);
+	}
 }

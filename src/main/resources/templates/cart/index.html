@@ -26,16 +26,23 @@
         </div>
         <div th:unless="${isEmpty}">
           <h1 class="header m-4 text-center">Books in cart</h1>
-          <ul class="list-group">
+          <ul class="list-group mb-2">
             <li class="list-group-item d-flex justify-content-between align-items-start" th:each="book: ${books}">
               <div class="ms-2 me-auto">
                 <div class="fw-bold" th:text="${book.title}"></div>
                 <span>by <span th:text="${book.author.getFullName()}"></span></span>
               </div>
+              <form method="post" th:action="@{/cart}">
+                <input type="hidden" name="removeBook" th:value="${book.id}" />
+                <input class="btn btn-outline-secondary" type="submit" value="Remove" />
+              </form>
             </li>
           </ul>
-          <div class="d-flex justify-content-center">
-            <a class="btn btn-primary" th:href="@{/library/browse}">Browse more</a>
+          <div class="d-flex justify-content-end">
+            <div class="btn-group" role="group">
+              <a class="btn btn-primary">Order</a>
+              <a class="btn btn-outline-secondary" th:href="@{/library/browse}">Browse more</a>
+            </div>
           </div>
         </div>
       </div>
