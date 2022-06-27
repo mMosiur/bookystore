@@ -82,7 +82,10 @@
               <li class="list-group-item d-flex justify-content-between align-items-center" th:each="author: ${authors}">
                 <div class="fw-bold" th:text="${author.getFullName()}"></div>
                 <div class="btn-group" role="group">
-                  <a class="btn btn-outline-secondary" th:href="@{/library/manage/authors(delete=${author.id})}">Delete</a>
+                  <form method="post" th:action="@{/library/manage/authors}">
+                    <input type="hidden" name="delete" th:value="${author.id}" />
+                    <input class="btn btn-outline-secondary" type="submit" value="Delete" />
+                  </form>
                   <a class="btn btn-outline-secondary" th:href="@{/library/manage/authors/{id}/details(id=${author.id})}">Edit</a>
                 </div>
               </li>

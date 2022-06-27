@@ -36,27 +36,34 @@ public class ManageAuthorsController {
 	}
 
 	@GetMapping
-	public String getManageAuthors(Model model, @RequestParam(required = false) Long delete) {
+	public String getManageAuthors(Model model) {
 		logger.debug("GET manage authors endpoint called");
 		AuthorDto newAuthor = new AuthorDto();
 		model.addAttribute("newAuthor", newAuthor);
-		if (delete != null) {
-			try {
-				AuthorEntity author = this.authorRepository.findById(delete).get();
-				this.authorRepository.delete(author);
-				String successMessage = String.format("Author %s deleted", author.getFullName());
-				model.addAttribute("successMessage", successMessage);
-			} catch (NoSuchElementException e) {
-				String errorMessage = "Error deleting author, given author does not exist";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (DataIntegrityViolationException e) {
-				String errorMessage = "Cannot delete given author, it is used by some books";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (Exception e) {
-				logger.error("Error deleting author", e);
-				String errorMessage = String.format("Error while deleting an author: %s", e.getMessage());
-				model.addAttribute("errorMessage", errorMessage);
-			}
+		model.addAttribute("authors", this.authorRepository.findAll());
+		return template("authors");
+	}
+
+	@PostMapping(params = "delete")
+	public String postManageAuthorsDelete(Model model, @RequestParam(required = true) long delete) {
+		logger.debug("POST manage authors (DELETE variant) endpoint called");
+		AuthorDto newAuthor = new AuthorDto();
+		model.addAttribute("newAuthor", newAuthor);
+		try {
+			AuthorEntity author = this.authorRepository.findById(delete).get();
+			this.authorRepository.delete(author);
+			String successMessage = String.format("Author %s deleted", author.getFullName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			String errorMessage = "Error deleting author, given author does not exist";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (DataIntegrityViolationException e) {
+			String errorMessage = "Cannot delete given author, it is used by some books";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error deleting author", e);
+			String errorMessage = String.format("Error while deleting an author: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
 		model.addAttribute("authors", this.authorRepository.findAll());
 		return template("authors");

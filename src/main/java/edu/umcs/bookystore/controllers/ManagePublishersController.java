@@ -36,27 +36,34 @@ public class ManagePublishersController {
 	}
 
 	@GetMapping
-	public String getManagePublishers(Model model, @RequestParam(required = false) Long delete) {
+	public String getManagePublishers(Model model) {
 		logger.debug("GET manage publishers endpoint called");
 		PublisherDto newPublisher = new PublisherDto();
 		model.addAttribute("newPublisher", newPublisher);
-		if (delete != null) {
-			try {
-				PublisherEntity publisher = this.publisherRepository.findById(delete).get();
-				this.publisherRepository.delete(publisher);
-				String successMessage = String.format("Publisher %s deleted", publisher.getName());
-				model.addAttribute("successMessage", successMessage);
-			} catch (NoSuchElementException e) {
-				String errorMessage = "Error deleting publisher, given publisher does not exist";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (DataIntegrityViolationException e) {
-				String errorMessage = "Cannot delete given publisher, it is used by some books";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (Exception e) {
-				logger.error("Error deleting publisher", e);
-				String errorMessage = String.format("Error while deleting a publisher: %s", e.getMessage());
-				model.addAttribute("errorMessage", errorMessage);
-			}
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		return template("publishers");
+	}
+
+	@PostMapping(params = "delete")
+	public String postManagePublishersDelete(Model model, @RequestParam(required = true) long delete) {
+		logger.debug("POST manage publishers (DELETE variant) endpoint called");
+		PublisherDto newPublisher = new PublisherDto();
+		model.addAttribute("newPublisher", newPublisher);
+		try {
+			PublisherEntity publisher = this.publisherRepository.findById(delete).get();
+			this.publisherRepository.delete(publisher);
+			String successMessage = String.format("Publisher %s deleted", publisher.getName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			String errorMessage = "Error deleting publisher, given publisher does not exist";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (DataIntegrityViolationException e) {
+			String errorMessage = "Cannot delete given publisher, it is used by some books";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error deleting publisher", e);
+			String errorMessage = String.format("Error while deleting a publisher: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
 		model.addAttribute("publishers", this.publisherRepository.findAll());
 		return template("publishers");
