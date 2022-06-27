@@ -48,24 +48,34 @@ public class ManageBooksController {
 	}
 
 	@GetMapping
-	public String getManageBooks(Model model, @RequestParam(required = false) Long delete) {
+	public String getManageBooks(Model model) {
 		logger.debug("GET manage books endpoint called");
 		BookDto newBook = new BookDto();
 		model.addAttribute("newBook", newBook);
-		if (delete != null) {
-			try {
-				BookEntity book = this.bookRepository.findById(delete).get();
-				this.bookRepository.delete(book);
-				String successMessage = String.format("Book \"%s\" deleted", book.getTitle());
-				model.addAttribute("successMessage", successMessage);
-			} catch (NoSuchElementException e) {
-				String errorMessage = "Error deleting book, given book does not exist";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (Exception e) {
-				logger.error("Error deleting book", e);
-				String errorMessage = String.format("Error while deleting a book: %s", e.getMessage());
-				model.addAttribute("errorMessage", errorMessage);
-			}
+		model.addAttribute("books", this.bookRepository.findAll());
+		model.addAttribute("authors", this.authorRepository.findAll());
+		model.addAttribute("publishers", this.publisherRepository.findAll());
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("books");
+	}
+
+	@PostMapping(params = "delete")
+	public String postManageBooksDelete(Model model, @RequestParam(required = true) long delete) {
+		logger.debug("POST manage books (DELETE variant) endpoint called");
+		BookDto newBook = new BookDto();
+		model.addAttribute("newBook", newBook);
+		try {
+			BookEntity book = this.bookRepository.findById(delete).get();
+			this.bookRepository.delete(book);
+			String successMessage = String.format("Book \"%s\" deleted", book.getTitle());
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			String errorMessage = "Error deleting book, given book does not exist";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error deleting book", e);
+			String errorMessage = String.format("Error while deleting a book: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
 		model.addAttribute("books", this.bookRepository.findAll());
 		model.addAttribute("authors", this.authorRepository.findAll());

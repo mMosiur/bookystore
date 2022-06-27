@@ -77,7 +77,10 @@
               </span>
             </div>
             <div class="btn-group" role="group">
-              <a class="btn btn-outline-secondary disabled">Add to cart</a>
+              <form th:action="@{/cart}" method="post">
+                <input type="hidden" name="addBook" th:value="${book.id}" />
+                <input class="btn btn-outline-secondary" type="submit" value="Add to cart" />
+              </form>
             </div>
           </li>
         </ul>

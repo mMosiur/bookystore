@@ -115,7 +115,10 @@
                   </span>
                 </div>
                 <div class="btn-group" role="group">
-                  <a class="btn btn-outline-secondary" th:href="@{/library/manage/books(delete=${book.id})}">Delete</a>
+                  <form method="post" th:action="@{/library/manage/books}">
+                    <input type="hidden" name="delete" th:value="${book.id}" />
+                    <input class="btn btn-outline-secondary" type="submit" value="Delete" />
+                  </form>
                   <a class="btn btn-outline-secondary" th:href="@{/library/manage/books/{id}/details(id=${book.id})}">Edit</a>
                 </div>
               </li>

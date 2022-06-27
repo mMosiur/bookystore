@@ -88,8 +88,10 @@
                   <div class="fw-bold" th:text="${category.name}"></div>
                 </div>
                 <div class="btn-group" role="group">
-                  <a class="btn btn-outline-secondary"
-                    th:href="@{/library/manage/categories(delete=${category.id})}">Delete</a>
+                  <form method="post" th:action="@{/library/manage/categories}">
+                    <input type="hidden" name="delete" th:value="${category.id}" />
+                    <input class="btn btn-outline-secondary" type="submit" value="Delete" />
+                  </form>
                   <a class="btn btn-outline-secondary"
                     th:href="@{/library/manage/categories/{id}/details(id=${category.id})}">Edit</a>
                 </div>

@@ -87,8 +87,10 @@
                   <div class="fw-bold" th:text="${publisher.name}"></div>
                 </div>
                 <div class="btn-group" role="group">
-                  <a class="btn btn-outline-secondary"
-                    th:href="@{/library/manage/publishers(delete=${publisher.id})}">Delete</a>
+                  <form method="post" th:action="@{/library/manage/publishers}">
+                    <input type="hidden" name="delete" th:value="${publisher.id}" />
+                    <input class="btn btn-outline-secondary" type="submit" value="Delete" />
+                  </form>
                   <a class="btn btn-outline-secondary"
                     th:href="@{/library/manage/publishers/{id}/details(id=${publisher.id})}">Edit</a>
                 </div>

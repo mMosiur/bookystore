@@ -36,27 +36,34 @@ public class ManageCategoriesController {
 	}
 
 	@GetMapping
-	public String getManageCategories(Model model, @RequestParam(required = false) Long delete) {
+	public String getManageCategories(Model model) {
 		logger.debug("GET manage categories endpoint called");
 		CategoryDto newCategory = new CategoryDto();
 		model.addAttribute("newCategory", newCategory);
-		if (delete != null) {
-			try {
-				CategoryEntity category = this.categoryRepository.findById(delete).get();
-				this.categoryRepository.delete(category);
-				String successMessage = String.format("Category %s deleted", category.getName());
-				model.addAttribute("successMessage", successMessage);
-			} catch (NoSuchElementException e) {
-				String errorMessage = "Error deleting category, given category does not exist";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (DataIntegrityViolationException e) {
-				String errorMessage = "Cannot delete given category, it is used by some books";
-				model.addAttribute("errorMessage", errorMessage);
-			} catch (Exception e) {
-				logger.error("Error deleting category", e);
-				String errorMessage = String.format("Error while deleting a category: %s", e.getMessage());
-				model.addAttribute("errorMessage", errorMessage);
-			}
+		model.addAttribute("categories", this.categoryRepository.findAll());
+		return template("categories");
+	}
+
+	@PostMapping(params = "delete")
+	public String postManageCategoriesDelete(Model model, @RequestParam(required = true) long delete) {
+		logger.debug("POST manage categories (DELETE variant) endpoint called");
+		CategoryDto newCategory = new CategoryDto();
+		model.addAttribute("newCategory", newCategory);
+		try {
+			CategoryEntity category = this.categoryRepository.findById(delete).get();
+			this.categoryRepository.delete(category);
+			String successMessage = String.format("Category %s deleted", category.getName());
+			model.addAttribute("successMessage", successMessage);
+		} catch (NoSuchElementException e) {
+			String errorMessage = "Error deleting category, given category does not exist";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (DataIntegrityViolationException e) {
+			String errorMessage = "Cannot delete given category, it is used by some books";
+			model.addAttribute("errorMessage", errorMessage);
+		} catch (Exception e) {
+			logger.error("Error deleting category", e);
+			String errorMessage = String.format("Error while deleting a category: %s", e.getMessage());
+			model.addAttribute("errorMessage", errorMessage);
 		}
 		model.addAttribute("categories", this.categoryRepository.findAll());
 		return template("categories");
