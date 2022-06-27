@@ -10,41 +10,54 @@
 </head>
 
 <body>
-  <h1>Registration</h1>
-  <div sec:authorize="isAuthenticated()">
-    <p class="alert alert-warning" role="alert">
-      You are already logged in, no need to register.
-    </p>
-    <p>
-      <a th:href="@{/user/logout}">Logout</a>
-    </p>
-  </div>
-  <div sec:authorize="!isAuthenticated()">
-    <div th:if="${usernameAlreadyExists}" class="alert alert-danger" role="alert">
-      User with given email already exists
+  <nav th:replace="fragments/header :: header"></nav>
+
+  <h1 class="header m-4 text-center">Register</h1>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md" sec:authorize="isAuthenticated()">
+        <p class="alert alert-warning" role="alert">
+          You are already logged in, no need to register.
+        </p>
+        <p>
+          <a class="btn btn-primary mb-2" th:href="@{/user/logout}">Logout</a>
+        </p>
+      </div>
+      <div class="col-md" sec:authorize="!isAuthenticated()">
+        <div th:if="${usernameAlreadyExists}" class="alert alert-danger" role="alert">
+          User with given email already exists
+        </div>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+          There was an error while creating your account
+        </div>
+        <div th:if="${userCreatedSuccessfully}" class="alert alert-success" role="alert">
+          User created successfully. <a th:href="@{/user/login}">Login here</a>.
+        </div>
+        <form th:action="@{/user/register}" th:object="${user}" method="post">
+          <div class="form-outline mb-4">
+            <input type="email" id="registerFormEmail" th:field="*{email}" class="form-control" />
+            <label class="form-label" for="registerFormEmail">Email address</label>
+          </div>
+          <div class="form-outline mb-4">
+            <input type="text" id="registerFormFirstName" th:field="*{firstName}" class="form-control" />
+            <label class="form-label" for="registerFormFirstName">First name</label>
+          </div>
+          <div class="form-outline mb-4">
+            <input type="text" id="registerFormLastName" th:field="*{lastName}" class="form-control" />
+            <label class="form-label" for="registerFormLastName">Last name</label>
+          </div>
+          <div class="form-outline mb-4">
+            <input type="password" th:field="*{password}" id="registerFormPassword" class="form-control" />
+            <label class="form-label" for="registerFormPassword">Password</label>
+          </div>
+          <input type="submit" th:disabled="${userCreatedSuccessfully}" class="btn btn-primary mb-2" value="Register"/>
+          <small class="form-text text-muted">Already have an account? <a th:href="@{/user/login}">Log In</a>.</small>
+        </form>
+      </div>
+      <div class="col-md"></div>
     </div>
-    <div th:if="${error}" class="alert alert-danger" role="alert">
-      There was an error while creating your account
-    </div>
-    <div th:if="${userCreatedSuccessfully}" class="alert alert-success" role="alert">
-      User created successfully
-      <p><a th:href="@{/user/login}">Login</a></p>
-    </div>
-    <form autocomplete="off" th:action="@{/user/register}" th:object="${user}" method="post">
-      <div>
-        <input type="email" th:field="*{email}" autocomplete="off" placeholder="Email" />
-      </div>
-      <div>
-        <input type="text" th:field="*{firstName}" autocomplete="off" placeholder="First name" />
-      </div>
-      <div>
-        <input type="text" th:field="*{lastName}" autocomplete="off" placeholder="Last name" />
-      </div>
-      <div>
-        <input type="password" th:field="*{password}" autocomplete="off" placeholder="Password" />
-      </div>
-      <input th:disabled="${userCreatedSuccessfully}" type="submit" value="Register" />
-    </form>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

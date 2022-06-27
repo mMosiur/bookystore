@@ -1,26 +1,45 @@
-<h1>browse books</h1>
-<form method="get">
-  <h2>Filter by</h2>
-  <select name="filterAuthor">
-    <option value="all">All</option>
-    <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}"
-      th:selected="${authorFilter != null && authorFilter.getId() == author.getId()}"></option>
-  </select>
-  <select name="filterPublisher">
-    <option value="all">All</option>
-    <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}"
-      th:selected="${publisherFilter != null && publisherFilter.getId() == publisher.getId()}">
-    </option>
-  </select>
-  <select name="filterCategory">
-    <option value="all">All</option>
-    <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
-      th:selected="${categoryFilter != null && categoryFilter.getId() == category.getId()}"></option>
-  </select>
-  <input type="submit" value="Apply filter">
-</form>
-<ul>
-  <li th:each="book: ${books}">
-    <span th:text="${book.title}"></span>
-  </li>
-</ul>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookystore - Manage publishers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav th:replace="fragments/header :: header"></nav>
+
+  <h1 class="header m-4 text-center">Browse library</h1>
+  <form method="get">
+    <h2>Filter by</h2>
+    <select name="filterAuthor">
+      <option value="all">All</option>
+      <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}"
+        th:selected="${authorFilter != null && authorFilter.getId() == author.getId()}"></option>
+    </select>
+    <select name="filterPublisher">
+      <option value="all">All</option>
+      <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}"
+        th:selected="${publisherFilter != null && publisherFilter.getId() == publisher.getId()}">
+      </option>
+    </select>
+    <select name="filterCategory">
+      <option value="all">All</option>
+      <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
+        th:selected="${categoryFilter != null && categoryFilter.getId() == category.getId()}"></option>
+    </select>
+    <input type="submit" value="Apply filter">
+  </form>
+  <ul>
+    <li th:each="book: ${books}">
+      <span th:text="${book.title}"></span>
+    </li>
+  </ul>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</body>

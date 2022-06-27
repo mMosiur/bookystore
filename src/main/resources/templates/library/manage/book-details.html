@@ -10,53 +10,93 @@
 </head>
 
 <body>
+  <nav th:replace="fragments/header :: header"></nav>
 
-  <h1>Book details</h1>
+  <h1 class="header m-4 text-center">Book details</h1>
 
   <div sec:authorize="!isAuthenticated()">
-    <p>You must be logged in and authorized to edit book.</p>
-    <a href="/user/login">Login</a>
+    <div class="alert alert-warning" role="alert">
+      <p class="text-center">You must be logged in and authorized to edit book.</p>
+      <div class="d-flex justify-content-center">
+        <a class="text-center btn btn-primary" th:href="@{/user/login}">Login</a>
+      </div>
+    </div>
   </div>
 
   <div sec:authorize="isAuthenticated()">
 
     <div sec:authorize="!hasRole('ROLE_ADMIN')">
-      <p>You must be an administrator to edit book</p>
+      <div class="alert alert-danger" role="alert">
+        <p class="text-center">You must be an administrator to edit book.</p>
+      </div>
     </div>
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-      <div th:if="${successMessage}" class="alert alert-success" role="alert">
-        <span th:text="${successMessage}"></span>
-      </div>
-      <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-        <span th:text="${errorMessage}"></span>
-      </div>
-      <div th:unless="${book}">
-        <p>Specified book not found</p>
-      </div>
-      <div th:if="${book}">
-        <form method="post" th:object="${book}" th:action="@{/library/manage/books/{id}/details(id=${id})}">
-          <h2>Edit book</h2>
-          <input type="text" th:field="*{title}" placeholder="Title" required>
-          <select name="author" th:field="*{authorId}">
-            <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}"></option>
-          </select>
-          <select name="publisher" th:field="*{publisherId}">
-            <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}" th:value="${publisher.getId()}">
-            </option>
-          </select>
-          <select name="category" th:field="*{categoryId}">
-            <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}">
-            </option>
-          </select>
-          <input type="number" name="price" th:field="*{price}" min="0" step="0.01" max="9999.99" required>
-          <input type="number" name="stock" th:field="*{stock}" min="0" step="1" max="9999" required>
-          <input type="submit" value="Save">
-          <input type="reset" value="Reset changes">
-        </form>
-      </div>
 
-      <a th:href="@{/library/manage/books}">Manage books</a>
+      <div class="container">
+        <div class="row">
+          <div class="col-md"></div>
+          <div class="col-md">
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+              <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+              <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:unless="${book}">
+              <div class="alert alert-danger" role="alert">
+                Specified book not found
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+              <a class="text-center btn btn-primary" th:href="@{/library/manage/books}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+                  <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                </svg>
+                Manage books
+              </a>
+            </div>
+            <div th:if="${book}">
+              <form method="post" th:object="${book}" th:action="@{/library/manage/books/{id}/details(id=${id})}">
+                <h2 class="header m-4 text-center">Edit book</h2>
+                <div class="mb-3">
+                  <label for="inputBookTitle" class="form-label">Title</label>
+                  <input type="text" class="form-control" th:field="*{title}" id="inputBookTitle" required>
+                </div>
+                <select class="form-select mb-3" name="author" th:field="*{authorId}">
+                  <option th:each="author: ${authors}" th:text="${author.getFullName()}" th:value="${author.getId()}">
+                  </option>
+                </select>
+                <select class="form-select mb-3" name="publisher" th:field="*{publisherId}">
+                  <option th:each="publisher: ${publishers}" th:text="${publisher.getName()}"
+                    th:value="${publisher.getId()}">
+                  </option>
+                </select>
+                <select class="form-select mb-3" name="category" th:field="*{categoryId}">
+                  <option th:each="category: ${categories}" th:text="${category.getName()}"
+                    th:value="${category.getId()}">
+                  </option>
+                </select>
+                <div class="mb-3">
+                  <label for="inputBookPrice" class="form-label">Price</label>
+                  <input type="number" class="form-control" th:field="*{price}" min="0" step="0.01" max="9999.99"
+                    id="inputBookPrice" required>
+                </div>
+                <div class="mb-3">
+                  <label for="inputBookStock" class="form-label">Stock</label>
+                  <input type="number" class="form-control" th:field="*{stock}" min="0" step="1" max="9999"
+                    id="inputBookStock" required>
+                </div>
+                <div class="mb-3">
+                  <input class="btn btn-primary" type="submit" value="Save">
+                  <input class="btn btn-secondary" type="reset" value="Reset changes">
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md"></div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -10,48 +10,93 @@
 </head>
 
 <body>
+  <nav th:replace="fragments/header :: header"></nav>
 
-  <h1>Publisher details</h1>
+  <h1 class="header m-4 text-center">Publisher details</h1>
 
   <div sec:authorize="!isAuthenticated()">
-    <p>You must be logged in and authorized to edit publisher.</p>
-    <a href="/user/login">Login</a>
+    <div class="alert alert-warning" role="alert">
+      <p class="text-center">You must be logged in and authorized to edit publisher.</p>
+      <div class="d-flex justify-content-center">
+        <a class="text-center btn btn-primary" th:href="@{/user/login}">Login</a>
+      </div>
+    </div>
   </div>
 
   <div sec:authorize="isAuthenticated()">
 
     <div sec:authorize="!hasRole('ROLE_ADMIN')">
-      <p>You must be an administrator to edit publisher</p>
+      <div class="alert alert-danger" role="alert">
+        <p class="text-center">You must be an administrator to edit publisher.</p>
+      </div>
     </div>
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-      <div th:if="${successMessage}" class="alert alert-success" role="alert">
-        <span th:text="${successMessage}"></span>
-      </div>
-      <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-        <span th:text="${errorMessage}"></span>
-      </div>
-      <div th:unless="${publisher}">
-        <p>Specified publisher not found</p>
-      </div>
-      <div th:if="${publisher}">
-        <form method="post" th:object="${publisher}" th:action="@{/library/manage/publishers/{id}/details(id=${id})}">
-          <h2>Edit publisher</h2>
-          <input type="text" name="name" th:field="*{name}" placeholder="Name" required>
-          <input type="submit" value="Save">
-          <input type="reset" value="Reset changes">
-        </form>
-        <h3>Publisher's books</h3>
-        <ul>
-          <li th:each="book: ${books}">
-            "<span th:text="${book.title}"></span>" by <span th:text="${book.author.getFullName()}"></span>
-            <a th:href="@{/library/manage/books(delete=${book.id})}">Delete</a>
-            <a th:href="@{/library/manage/books/{id}/details(id=${book.id})}">Details / Edit</a>
-          </li>
-        </ul>
-      </div>
 
-      <a th:href="@{/library/manage/publishers}">Manage publishers</a>
+      <div class="container">
+        <div class="row">
+          <div class="col-md"></div>
+          <div class="col-md">
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+              <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+              <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:unless="${publisher}">
+              <div class="alert alert-danger" role="alert">
+                Specified publisher not found
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+              <a class="text-center btn btn-primary" th:href="@{/library/manage/publishers}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+                  <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                </svg>
+                Manage publishers
+              </a>
+            </div>
+            <div th:if="${publisher}">
+              <form method="post" th:object="${publisher}"
+                th:action="@{/library/manage/publishers/{id}/details(id=${id})}">
+                <h2 class="header m-4 text-center">Edit publisher</h2>
+                <div class="mb-3">
+                  <label for="inputPublisherName" class="form-label">Name</label>
+                  <input type="text" class="form-control" th:field="*{name}" id="inputPublisherName" required>
+                </div>
+                <div class="mb-3">
+                  <input class="btn btn-primary" type="submit" value="Save">
+                  <input class="btn btn-secondary" type="reset" value="Reset changes">
+                </div>
+              </form>
+
+              <div class="accordion" id="accordionPublisherListBooks">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="accordionListBooksHeader">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionListBooksBody" aria-expanded="false" aria-controls="accordionListBooksBody">
+                      Publisher's books
+                    </button>
+                  </h2>
+                  <div id="accordionListBooksBody" class="accordion-collapse collapse" aria-labelledby="accordionListBooksHeader" data-bs-parent="#accordionPublisherListBooks">
+                    <div class="accordion-body">
+                      <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" th:each="book: ${books}">
+                          <div th:text="${book.title}"></div>
+                          <div class="btn-group" role="group">
+                            <a class="btn btn-outline-secondary" th:href="@{/library/manage/books(delete=${book.id})}">Delete</a>
+                            <a class="btn btn-outline-secondary" th:href="@{/library/manage/books/{id}/details(id=${book.id})}">Edit</a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md"></div>
+        </div>
+      </div>
     </div>
   </div>
 

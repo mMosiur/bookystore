@@ -10,26 +10,57 @@
 </head>
 
 <body>
+  <nav th:replace="fragments/header :: header"></nav>
 
-  <h1>Manage books</h1>
+  <h1 class="header m-4 text-center">Manage library</h1>
 
   <div sec:authorize="!isAuthenticated()">
-    <!-- if is not authenticated -->
-    <p>You must be logged in and authorized to manage books.</p>
-    <a href="/user/login">Login</a>
-  </div>
-  <div sec:authorize="isAuthenticated()">
-    <!-- else -->
-    <div sec:authorize="!hasRole('ROLE_ADMIN')">
-      <!-- if not admin -->
-      <p>You must be an administrator to manage books.</p>
+    <div class="alert alert-warning" role="alert">
+      <p class="text-center">You must be logged in and authorized to manage library.</p>
+      <div class="d-flex justify-content-center">
+        <a class="text-center btn btn-primary" th:href="@{/user/login}">Login</a>
+      </div>
     </div>
+  </div>
+
+  <div sec:authorize="isAuthenticated()">
+
+    <div sec:authorize="!hasRole('ROLE_ADMIN')">
+      <div class="alert alert-danger" role="alert">
+        <p class="text-center">You must be an administrator to manage library.</p>
+      </div>
+    </div>
+
     <div sec:authorize="hasRole('ROLE_ADMIN')">
 
-      <p><a th:href="@{/library/manage/authors}">Manage authors</a></p>
-      <p><a th:href="@{/library/manage/publishers}">Manage publishers</a></p>
-      <p><a th:href="@{/library/manage/categories}">Manage categories</a></p>
-      <p><a th:href="@{/library/manage/books}">Manage books</a></p>
+      <div class="container">
+        <div class="row">
+          <div class="col-md"></div>
+          <div class="col-md">
+            <div class="d-flex justify-content-center">
+              <p>
+                <a class="btn btn-secondary w-100" th:href="@{/library/manage/authors}">Manage authors</a>
+              </p>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p>
+                <a class="btn btn-secondary w-100" th:href="@{/library/manage/publishers}">Manage publishers</a>
+              </p>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p>
+                <a class="btn btn-secondary w-100" th:href="@{/library/manage/categories}">Manage categories</a>
+              </p>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p>
+                <a class="btn btn-secondary w-100" th:href="@{/library/manage/books}">Manage books</a>
+              </p>
+            </div>
+          </div>
+          <div class="col-md"></div>
+        </div>
+      </div>
     </div>
   </div>
 
