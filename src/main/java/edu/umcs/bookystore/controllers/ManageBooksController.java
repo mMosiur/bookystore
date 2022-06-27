@@ -98,15 +98,10 @@ public class ManageBooksController {
 					newBook.getPrice(),
 					newBook.getStock());
 			bookEntity = this.bookRepository.save(bookEntity);
-			newBook.setTitle(bookEntity.getTitle());
-			newBook.setAuthorId(bookEntity.getAuthor().getId());
-			newBook.setPublisherId(bookEntity.getPublisher().getId());
-			newBook.setCategoryId(bookEntity.getCategory().getId());
-			newBook.setPrice(bookEntity.getPrice());
-			newBook.setStock(bookEntity.getStock());
 			String successMessage = String.format("Book \"%s\" by \"%s\" created",
 					bookEntity.getTitle(), authorEntity.getFullName());
 			model.addAttribute("successMessage", successMessage);
+			newBook = new BookDto();
 		} catch (Exception e) {
 			logger.error("Error creating book", e);
 			String errorMessage = String.format("Error creating book: %s", e.getMessage());
