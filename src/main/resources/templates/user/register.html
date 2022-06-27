@@ -12,11 +12,12 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
+  <h1 class="header m-4 text-center">Register</h1>
+
   <div class="container">
     <div class="row">
       <div class="col-md"></div>
       <div class="col-md" sec:authorize="isAuthenticated()">
-        <h1 class="header m-4 text-center">Register</h1>
         <p class="alert alert-warning" role="alert">
           You are already logged in, no need to register.
         </p>
@@ -25,7 +26,6 @@
         </p>
       </div>
       <div class="col-md" sec:authorize="!isAuthenticated()">
-        <h1>Register</h1>
         <div th:if="${usernameAlreadyExists}" class="alert alert-danger" role="alert">
           User with given email already exists
         </div>
