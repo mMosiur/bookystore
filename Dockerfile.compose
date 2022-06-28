@@ -4,7 +4,7 @@ WORKDIR /app/source
 COPY ./pom.xml ./pom.xml
 RUN mvn verify --fail-never
 COPY ./src ./src
-RUN mvn clean package -Dmaven.test.skip
+RUN mvn clean package -Dmaven.test.skip -Pdocker
 
 # Package stage
 FROM openjdk:11-jre-slim
