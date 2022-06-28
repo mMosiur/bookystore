@@ -21,7 +21,7 @@ jobs:
           POSTGRESQL_DB_NAME: ${{ secrets.POSTGRESQL_DB_NAME }}
           POSTGRESQL_USER_NAME: ${{ secrets.POSTGRESQL_USER_NAME }}
           POSTGRESQL_USER_PASSWORD: ${{ secrets.POSTGRESQL_USER_PASSWORD }}
-        run: mvn clean package
+        run: mvn clean package -Dmaven.test.skip -Pprod
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:

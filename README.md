@@ -54,6 +54,9 @@ W projekcie zdefiniowane są trzy profile:
 - #### Profil `prod`:
 
   Profil dedykowany dla uruchomienia w środowisku produkcyjnym.
+  Używane jest przez pipeline `cd.yml` uruchamiany jako GitHub action,
+  który buduje z nim aplikację wstawiając wrażliwe dane ze zmiennych środowiskowych,
+  które są przekazywane z GitHub secrets.
 
 ## Uruchomienie
 
