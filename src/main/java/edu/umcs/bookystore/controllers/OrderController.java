@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -42,18 +43,26 @@ public class OrderController {
 		return String.format("%s/%s", TEMPLATES_DIRECTORY, name);
 	}
 
-	@PostMapping
-	public String postOrder(Model model) {
+	@GetMapping("/list")
+	public String getOrderList(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+			return "redirect:/user/login";
+		}
+		UserEntity user = userRepository.findByUsername(auth.getName()).get();
+		model.addAttribute("orders", user);
+		return template("list");
+	}
+
+	@PostMapping("/create")
+	public String postCreateOrder(Model model) {
 		logger.debug("POST order endpoint called");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
 			return "redirect:/user/login";
 		}
-		String username = auth.getName();
-		UserEntity user = userRepository.findByUsername(username).get();
-		OrderDto order = new OrderDto(
-				user.getId(),
-				cart.getBookIds());
+		UserEntity user = userRepository.findByUsername(auth.getName()).get();
+		OrderDto order = new OrderDto(user.getId(), cart.getBookIds());
 		try {
 			Long orderId = this.orderService.createOrder(order);
 			model.addAttribute("successMessage", "Order created successfully. Order id: " + orderId);
@@ -62,7 +71,7 @@ public class OrderController {
 			String errorMessage = String.format("The book \"%s\" is out of stock.", book.getTitle());
 			model.addAttribute("errorMessage", errorMessage);
 		}
-		return template("index");
+		return template("create");
 	}
 
 }
