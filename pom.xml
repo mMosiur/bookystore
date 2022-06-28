@@ -88,6 +88,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </activation>
     </profile>
     <profile>
+      <id>docker</id>
+      <properties>
+        <activatedProperties>docker</activatedProperties>
+      </properties>
+    </profile>
+    <profile>
       <id>prod</id>
       <properties>
         <activatedProperties>prod</activatedProperties>
