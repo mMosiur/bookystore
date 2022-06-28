@@ -1,0 +1,11 @@
+<h1>ORDER</h1>
+
+<div th:if="${errorMessage}">
+  <h2>ERROR</h2>
+  <span th:text="${errorMessage}"></span>
+</div>
+
+<div th:if="${successMessage}">
+  <h2>SUCCESS</h2>
+  <span th:text="${successMessage}"></span>
+</div>

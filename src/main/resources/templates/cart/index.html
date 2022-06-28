@@ -40,7 +40,9 @@
           </ul>
           <div class="d-flex justify-content-end">
             <div class="btn-group" role="group">
-              <a class="btn btn-primary">Order</a>
+              <form method="post" th:action="@{/order}">
+                <input class="btn btn-primary" type="submit" value="Order">
+              </form>
               <a class="btn btn-outline-secondary" th:href="@{/library/browse}">Browse more</a>
             </div>
           </div>
