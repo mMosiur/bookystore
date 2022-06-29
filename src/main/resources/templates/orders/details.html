@@ -40,28 +40,28 @@
             <h2 class="header mb-4 text-center">Order <span th:text="${order.id}"></span></h2>
             <ul class="list-group mb-2">
               <li class="list-group-item">
-                Name: <span th:text="${order.user.getFullName()}"></span>
+                Name: <span class="font-weight-bold" th:text="${order.user.getFullName()}"></span>
               </li>
               <li class="list-group-item">
-                Email: <span th:text="${order.user.email}"></span>
+                Email: <span class="font-weight-bold" th:text="${order.user.email}"></span>
               </li>
               <li class="list-group-item">
                 Books:
                 <ul class="list-group">
                   <li class="list-group-item" th:each="bookName: ${order.bookNames}">
-                    <span th:text="${bookName}"></span>
+                    <span class="font-weight-bold" th:text="${bookName}"></span>
                   </li>
                 </ul>
               </li>
               <li class="list-group-item">
                 Order status:
-                <span th:if="${order.isCompleted}">Completed</span>
-                <span th:unless="${order.isCompleted}">In progress</span>
+                <span class="font-weight-bold" th:if="${order.isCompleted}">Completed</span>
+                <span class="font-weight-bold" th:unless="${order.isCompleted}">In progress</span>
               </li>
               <li class="list-group-item">
                 Payment status:
-                <span th:if="${order.isPaid}">Paid</span>
-                <span th:unless="${order.isPaid}">Not paid</span>
+                <span class="font-weight-bold" th:if="${order.isPaid}">Paid</span>
+                <span class="font-weight-bold" th:unless="${order.isPaid}">Not paid</span>
               </li>
             </ul>
             <div class="d-flex justify-content-around">
@@ -75,7 +75,7 @@
                 </form>
                 <form th:if="${order.isCompleted}" method="post" th:action="@{/orders/manage/incomplete(id=${order.id})}">
                   <input type="hidden" name="id" th:value="${order.id}">
-                  <input type="submit" class="btn btn-primary" value="Complete">
+                  <input type="submit" class="btn btn-primary" value="Mark as incomplete">
                 </form>
               </div>
             </div>

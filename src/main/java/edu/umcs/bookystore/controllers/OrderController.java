@@ -56,17 +56,19 @@ public class OrderController {
 	@GetMapping("/list")
 	public String getOrderList(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Set<OrderEntity> orders = orderService.getOrdersOfUser(auth.getName());
-		List<OrderDto> ordersCompleted = orders.stream()
-				.filter(o -> o.isCompleted())
-				.map(o -> getOrderDtoFromEntity(o))
-				.collect(Collectors.toList());
-		List<OrderDto> ordersInProgress = orders.stream()
-				.filter(o -> !o.isCompleted())
-				.map(o -> getOrderDtoFromEntity(o))
-				.collect(Collectors.toList());
-		model.addAttribute("ordersCompleted", ordersCompleted);
-		model.addAttribute("ordersInProgress", ordersInProgress);
+		if (auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+			Set<OrderEntity> orders = orderService.getOrdersOfUser(auth.getName());
+			List<OrderDto> ordersCompleted = orders.stream()
+					.filter(o -> o.isCompleted())
+					.map(o -> getOrderDtoFromEntity(o))
+					.collect(Collectors.toList());
+			List<OrderDto> ordersInProgress = orders.stream()
+					.filter(o -> !o.isCompleted())
+					.map(o -> getOrderDtoFromEntity(o))
+					.collect(Collectors.toList());
+			model.addAttribute("ordersCompleted", ordersCompleted);
+			model.addAttribute("ordersInProgress", ordersInProgress);
+		}
 		return template("list");
 	}
 

@@ -45,7 +45,7 @@
             </div>
 
             <div>
-              <h2 class="header mb-4 text-center">Orders in progress</h2>
+              <h2 class="header mb-4">All in progress</h2>
               <p th:if="${ordersInProgress.size==0}">No orders</p>
               <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center"
@@ -73,13 +73,13 @@
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#accordionListOrdersBody" aria-expanded="false"
                     aria-controls="accordionListOrdersBody">
-                    Completed orders
+                    All completed
                   </button>
                 </h2>
                 <div id="accordionListOrdersBody" class="accordion-collapse collapse"
                   aria-labelledby="accordionListOrdersHeader" data-bs-parent="#accordionListOrders">
                   <div class="accordion-body">
-                    <h2 class="header mb-4 text-center">Completed orders</h2>
+                    <h2 class="header mb-4">All completed orders</h2>
                     <p th:if="${ordersCompleted.size==0}">No orders</p>
                     <ul class="list-group">
                       <li class="list-group-item d-flex justify-content-between align-items-center"
@@ -91,6 +91,9 @@
                               <span th:text="${bookName}"></span>
                             </li>
                           </ol>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-outline-secondary" th:href="@{/orders/{id}/details(id=${order.id})}">Check</a>
                         </div>
                         <span th:if="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-success border-light">Paid</span>
                         <span th:unless="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-danger border-light">Not paid</span>
