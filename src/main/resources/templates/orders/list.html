@@ -38,6 +38,7 @@
 
           <div>
             <h2 class="header mb-4 text-center">My orders in progress</h2>
+            <p th:if="${ordersInProgress.size==0}">No orders</p>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
                 th:each="order: ${ordersInProgress}">
@@ -73,6 +74,7 @@
                 aria-labelledby="accordionListOrdersHeader" data-bs-parent="#accordionListOrders">
                 <div class="accordion-body">
                   <h2 class="header mb-4 text-center">My past orders</h2>
+                  <p th:if="${ordersCompleted.size==0}">No orders</p>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center"
                       th:each="order: ${ordersCompleted}">
@@ -82,6 +84,9 @@
                             <span th:text="${bookName}"></span>
                           </li>
                         </ol>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <a class="btn btn-outline-secondary" th:href="@{/orders/{id}/details(id=${order.id})}">Details</a>
                       </div>
                     </li>
                   </ul>

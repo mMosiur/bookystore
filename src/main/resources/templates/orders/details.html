@@ -65,7 +65,8 @@
               </li>
             </ul>
             <div class="d-flex justify-content-around">
-              <a class="btn btn-primary" th:href="@{/orders/list}">My orders</a>
+              <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/orders/manage}">Manage orders</a>
+              <a sec:authorize="!hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/orders/list}">My orders</a>
               <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:unless="${order.isCompleted}" method="post"
                   th:action="@{/orders/manage/complete(id=${order.id})}">
