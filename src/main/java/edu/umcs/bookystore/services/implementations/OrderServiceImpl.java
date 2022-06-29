@@ -1,11 +1,14 @@
 package edu.umcs.bookystore.services.implementations;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import edu.umcs.bookystore.dtos.OrderDto;
+import edu.umcs.bookystore.dtos.CreateOrderDto;
 import edu.umcs.bookystore.entities.BookEntity;
 import edu.umcs.bookystore.entities.OrderEntity;
 import edu.umcs.bookystore.entities.UserEntity;
@@ -29,13 +32,11 @@ public class OrderServiceImpl implements OrderService {
 		this.orderRepository = orderRepository;
 	}
 
-	@Override
-	public Long createOrder(OrderDto order) throws OutOfStockException {
+	public Long createOrder(CreateOrderDto order) throws OutOfStockException {
 		OrderEntity orderEntity = new OrderEntity();
 		UserEntity user = userRepository.findById(order.getUserId())
 				.orElseThrow(() -> new IllegalArgumentException("User with id " + order.getUserId() + " not found"));
 		orderEntity.setUser(user);
-		// List<BookEntity> books = bookRepository.findAllById(order.getBookIds());
 		Set<BookEntity> books = new HashSet<>();
 		for (Long bookId : order.getBookIds()) {
 			BookEntity book = bookRepository.findById(bookId)
@@ -53,6 +54,24 @@ public class OrderServiceImpl implements OrderService {
 		orderEntity.getBooks().addAll(books);
 		orderEntity = orderRepository.save(orderEntity);
 		return orderEntity.getId();
+	}
+
+	public List<OrderEntity> getAllOrders() {
+		return orderRepository.findAll();
+	}
+
+	public Set<OrderEntity> getOrdersOfUser(String username) throws NoSuchElementException {
+		UserEntity user = userRepository.findByUsername(username).get();
+		return user.getOrders();
+	}
+
+	public OrderEntity getOrderById(Long orderId) throws NoSuchElementException {
+		Optional<OrderEntity> order = orderRepository.findById(orderId);
+		return order.get();
+	}
+
+	public void commit() {
+		this.orderRepository.flush();
 	}
 
 }

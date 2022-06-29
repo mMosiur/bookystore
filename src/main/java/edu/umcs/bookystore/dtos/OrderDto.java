@@ -5,36 +5,69 @@ import java.util.Set;
 
 public class OrderDto {
 
-	private Long userId;
-	private Set<Long> bookIds;
+    private long id;
+    private UserInfoDto user;
+    private boolean isCompleted;
+    private boolean isPaid;
+    private Set<String> bookNames = new HashSet<>();
 
-	public OrderDto() {
-	}
+    public OrderDto() {
+    }
 
-	public OrderDto(Long userId) {
-		this.userId = userId;
-		this.bookIds = new HashSet<>();
-	}
+    public OrderDto(long id, UserInfoDto user, boolean isCompleted, boolean isPaid, Set<String> booksNames) {
+        this.id = id;
+        this.user = user;
+        this.isPaid = isPaid;
+        this.isCompleted = isCompleted;
+        this.bookNames = booksNames;
+    }
 
-	public OrderDto(Long userId, Set<Long> bookIds) {
-		this.userId = userId;
-		this.bookIds = bookIds;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public UserInfoDto getUser() {
+        return user;
+    }
 
-	public Set<Long> getBookIds() {
-		return bookIds;
-	}
+    public void setUser(UserInfoDto user) {
+        this.user = user;
+    }
 
-	public void setBookIds(Set<Long> bookIds) {
-		this.bookIds = bookIds;
-	}
+    public boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(boolean isPaid) {
+        this.isPaid = isPaid;
+    }
+
+    public Set<String> getBookNames() {
+        return bookNames;
+    }
+
+    public void setBookNames(Set<String> booksNames) {
+        this.bookNames = booksNames;
+    }
+
+    public void addBookName(String bookName) {
+        this.bookNames.add(bookName);
+    }
+
+    public void removeBookName(String bookName) {
+        this.bookNames.remove(bookName);
+    }
 
 }

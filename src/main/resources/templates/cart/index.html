@@ -16,6 +16,13 @@
     <div class="row">
       <div class="col-md"></div>
       <div class="col-md">
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+          <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+          <span th:text="${errorMessage}"></span>
+        </div>
+
         <div th:if="${isEmpty}">
           <h1 class="header m-4 text-center">No books in cart</h1>
           <p class="text-center">The cart is empty.</p>
@@ -40,7 +47,7 @@
           </ul>
           <div class="d-flex justify-content-end">
             <div class="btn-group" role="group">
-              <form method="post" th:action="@{/order}">
+              <form method="post" th:action="@{/orders/create}">
                 <input class="btn btn-primary" type="submit" value="Order">
               </form>
               <a class="btn btn-outline-secondary" th:href="@{/library/browse}">Browse more</a>
