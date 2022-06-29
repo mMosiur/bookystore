@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookystore - Manage orders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav th:replace="fragments/header :: header"></nav>
+
+  <h1 class="header m-4 text-center">Manage orders</h1>
+
+  <div sec:authorize="!isAuthenticated()">
+    <div class="alert alert-warning" role="alert">
+      <p class="text-center">You must be logged in and authorized to manage orders.</p>
+      <div class="d-flex justify-content-center">
+        <a class="text-center btn btn-primary" th:href="@{/user/login}">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <div sec:authorize="isAuthenticated()">
+
+    <div sec:authorize="!hasRole('ROLE_ADMIN')">
+      <div class="alert alert-danger" role="alert">
+        <p class="text-center">You must be an administrator to manage orders.</p>
+      </div>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md"></div>
+          <div class="col-md">
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+              <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+              <span th:text="${errorMessage}"></span>
+            </div>
+
+            <div>
+              <h2 class="header mb-4">All in progress</h2>
+              <p th:if="${ordersInProgress.size==0}">No orders</p>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                  th:each="order: ${ordersInProgress}">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold" th:text="${order.user.getFullNameAndEmail()}"></div>
+                    <ol class="list-group list-group-numbered">
+                      <li class="list-group-item" th:each="bookName: ${order.bookNames}">
+                        <span th:text="${bookName}"></span>
+                      </li>
+                    </ol>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <a class="btn btn-outline-secondary" th:href="@{/orders/{id}/details(id=${order.id})}">Check</a>
+                  </div>
+                  <span th:if="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-success border-light">Paid</span>
+                  <span th:unless="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-danger border-light">Not paid</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="accordion" id="accordionListOrders">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="accordionListOrdersHeader">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#accordionListOrdersBody" aria-expanded="false"
+                    aria-controls="accordionListOrdersBody">
+                    All completed
+                  </button>
+                </h2>
+                <div id="accordionListOrdersBody" class="accordion-collapse collapse"
+                  aria-labelledby="accordionListOrdersHeader" data-bs-parent="#accordionListOrders">
+                  <div class="accordion-body">
+                    <h2 class="header mb-4">All completed orders</h2>
+                    <p th:if="${ordersCompleted.size==0}">No orders</p>
+                    <ul class="list-group">
+                      <li class="list-group-item d-flex justify-content-between align-items-center"
+                        th:each="order: ${ordersCompleted}">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold" th:text="${order.user.getFullNameAndEmail()}"></div>
+                          <ol class="list-group list-group-numbered">
+                            <li class="list-group-item" th:each="bookName: ${order.bookNames}">
+                              <span th:text="${bookName}"></span>
+                            </li>
+                          </ol>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-outline-secondary" th:href="@{/orders/{id}/details(id=${order.id})}">Check</a>
+                        </div>
+                        <span th:if="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-success border-light">Paid</span>
+                        <span th:unless="${order.isPaid}" class="position-absolute top-0 end-0 badge rounded-pill bg-danger border-light">Not paid</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -33,6 +33,9 @@ public class UserEntity {
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<RoleEntity> roles;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<OrderEntity> orders;
+
 	// Getters and setters
 
 	public UserEntity() {
@@ -140,6 +143,10 @@ public class UserEntity {
 			this.roles = new HashSet<>();
 		}
 		this.roles.add(role);
+	}
+
+	public Set<OrderEntity> getOrders() {
+		return orders;
 	}
 
 }
