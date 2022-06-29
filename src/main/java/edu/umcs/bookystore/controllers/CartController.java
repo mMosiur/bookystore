@@ -9,10 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.umcs.bookystore.components.Cart;
+import edu.umcs.bookystore.dtos.payu.OrderCreationNotifyDto;
 import edu.umcs.bookystore.repositories.BookRepository;
 import edu.umcs.bookystore.entities.BookEntity;
 
@@ -58,5 +61,12 @@ public class CartController {
 		logger.debug("POST remove from cart endpoint called");
 		this.cart.remove(removeBook);
 		return getCart(model);
+	}
+
+	@PostMapping("/test")
+	@ResponseBody
+	public String postTest(Model model, @RequestBody OrderCreationNotifyDto response) {
+		logger.debug("POST test endpoint called");
+		return response.getOrder().getStatus();
 	}
 }

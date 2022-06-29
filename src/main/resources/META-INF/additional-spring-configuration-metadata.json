@@ -9,6 +9,26 @@
             "name": "spring.security.user.lastName",
             "type": "java.lang.String",
             "description": "Last name for the default user name."
+        },
+        {
+            "name": "bookystore.payment.orderCreationUrl",
+            "type": "java.lang.String",
+            "description": "URL for the order creation service."
+        },
+        {
+            "name": "bookystore.payment.authToken",
+            "type": "java.lang.String",
+            "description": "Authorization token for the order creation service."
+        },
+        {
+            "name": "bookystore.payment.continueUrlTemplate",
+            "type": "java.lang.String",
+            "description": "Template for the continuation URL for the order creation service."
+        },
+        {
+            "name": "bookystore.payment.notifyUrlTemplate",
+            "type": "java.lang.String",
+            "description": "Template for the notification URL for the order creation service."
         }
     ]
 }
