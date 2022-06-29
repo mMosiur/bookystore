@@ -37,7 +37,7 @@ public class ManagePublishersController {
 
 	@GetMapping
 	public String getManagePublishers(Model model) {
-		logger.debug("GET manage publishers endpoint called");
+		logger.info("GET manage publishers endpoint called");
 		PublisherDto newPublisher = new PublisherDto();
 		model.addAttribute("newPublisher", newPublisher);
 		model.addAttribute("publishers", this.publisherRepository.findAll());
@@ -46,7 +46,7 @@ public class ManagePublishersController {
 
 	@PostMapping(params = "delete")
 	public String postManagePublishersDelete(Model model, @RequestParam(required = true) long delete) {
-		logger.debug("POST manage publishers (DELETE variant) endpoint called");
+		logger.info("POST manage publishers (DELETE variant) endpoint called");
 		PublisherDto newPublisher = new PublisherDto();
 		model.addAttribute("newPublisher", newPublisher);
 		try {
@@ -71,7 +71,7 @@ public class ManagePublishersController {
 
 	@PostMapping
 	public String postManagePublishers(Model model, @ModelAttribute PublisherDto newPublisher) {
-		logger.debug("POST manage publishers endpoint called");
+		logger.info("POST manage publishers endpoint called");
 		try {
 			PublisherEntity publisherEntity = new PublisherEntity(
 					newPublisher.getName());
@@ -91,7 +91,7 @@ public class ManagePublishersController {
 
 	@GetMapping("/{id}/details")
 	public String getPublisherDetails(Model model, @PathVariable long id) {
-		logger.debug("GET publisher details endpoint called");
+		logger.info("GET publisher details endpoint called");
 		model.addAttribute("id", id);
 		PublisherEntity publisherEntity = this.publisherRepository.findById(id).orElse(null);
 		PublisherDto publisher = null;
@@ -105,7 +105,7 @@ public class ManagePublishersController {
 
 	@PostMapping("/{id}/details")
 	public String postPublisherDetails(Model model, @PathVariable long id, @ModelAttribute PublisherDto publisher) {
-		logger.debug("POST publisher details endpoint called");
+		logger.info("POST publisher details endpoint called");
 		model.addAttribute("id", id);
 		try {
 			PublisherEntity publisherEntity = this.publisherRepository.findById(id).get();

@@ -32,7 +32,7 @@ public class UserController {
 
 	@GetMapping("/login")
 	public String getLogin(Model model) {
-		logger.debug("GET Login endpoint called");
+		logger.info("GET Login endpoint called");
 		return template("login");
 	}
 
@@ -40,14 +40,14 @@ public class UserController {
 
 	@GetMapping("/register")
 	public String getRegister(Model model) {
-		logger.debug("GET Register endpoint called");
+		logger.info("GET Register endpoint called");
 		model.addAttribute("user", new UserDto());
 		return template("register");
 	}
 
 	@PostMapping("/register")
 	public String postRegister(Model model, @ModelAttribute UserDto user) {
-		logger.debug("POST Register endpoint called");
+		logger.info("POST Register endpoint called");
 		boolean userCreatedSuccessfully = false;
 		boolean usernameAlreadyExists = false;
 		boolean error = false;

@@ -15,13 +15,13 @@ public class IndexController {
 
 	@GetMapping("/")
 	public String getIndex(Model model) {
-		logger.debug("Index endpoint called");
+		logger.info("Index endpoint called");
 		return "index";
 	}
 
 	@GetMapping("/error")
 	public String getError(Model model) {
-		logger.debug("Error endpoint called");
+		logger.info("Error endpoint called");
 		return "index";
 	}
 
