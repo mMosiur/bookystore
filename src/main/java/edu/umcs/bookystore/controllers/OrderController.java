@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.umcs.bookystore.components.Cart;
 import edu.umcs.bookystore.dtos.CreateOrderDto;
 import edu.umcs.bookystore.dtos.OrderDto;
 import edu.umcs.bookystore.dtos.UserInfoDto;
+import edu.umcs.bookystore.dtos.payu.OrderCreationNotifyDto;
 import edu.umcs.bookystore.entities.BookEntity;
 import edu.umcs.bookystore.entities.OrderEntity;
 import edu.umcs.bookystore.entities.UserEntity;
@@ -28,6 +30,8 @@ import edu.umcs.bookystore.exceptions.OutOfStockException;
 import edu.umcs.bookystore.repositories.BookRepository;
 import edu.umcs.bookystore.repositories.UserRepository;
 import edu.umcs.bookystore.services.OrderService;
+import edu.umcs.bookystore.services.PaymentService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/orders")
@@ -36,17 +40,19 @@ public class OrderController {
 	private static final String TEMPLATES_DIRECTORY = "orders";
 	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-	private Cart cart;
-	private UserRepository userRepository;
-	private BookRepository bookRepository;
-	private OrderService orderService;
+	private final Cart cart;
+	private final UserRepository userRepository;
+	private final BookRepository bookRepository;
+	private final OrderService orderService;
+	private final PaymentService paymentService;
 
 	public OrderController(Cart cart, UserRepository userRepository, BookRepository bookRepository,
-			OrderService orderService) {
+			OrderService orderService, PaymentService paymentService) {
 		this.cart = cart;
 		this.userRepository = userRepository;
 		this.bookRepository = bookRepository;
 		this.orderService = orderService;
+		this.paymentService = paymentService;
 	}
 
 	private String template(String name) {
@@ -163,15 +169,51 @@ public class OrderController {
 
 	@GetMapping("/{id}/details")
 	public String getOrderDetails(Model model, @PathVariable("id") Long id) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		logger.debug("GET order details endpoint called");
 		try {
 			OrderEntity order = orderService.getOrderById(id);
+			model.addAttribute("isOwner",
+					auth.getName().equals(order.getUser().getUsername()));
 			OrderDto orderDto = getOrderDtoFromEntity(order);
 			model.addAttribute("order", orderDto);
 		} catch (NoSuchElementException e) {
 			model.addAttribute("errorMessage", "Order not found.");
 		}
 		return template("details");
+	}
+
+	@PostMapping("/{id}/payment")
+	public String postOrderPayment(Model model, @PathVariable("id") Long id) {
+		logger.debug("POST order payment endpoint called");
+		try {
+			String redirectUrl = paymentService.initializePayForOrder(id);
+			return "redirect:" + redirectUrl;
+		} catch (NoSuchElementException e) {
+			model.addAttribute("errorMessage", "Order not found.");
+		}
+		return getOrderDetails(model, id);
+	}
+
+	@PostMapping("/{id}/payment/notification")
+	@ResponseBody
+	public String postOrderPaymentNotification(@PathVariable("id") Long id,
+			@RequestBody OrderCreationNotifyDto notify) {
+		logger.debug("POST order payment notification endpoint called");
+		OrderEntity order = null;
+		try {
+			order = orderService.getOrderById(id);
+		} catch (NoSuchElementException e) {
+			logger.debug("Book with id {} not found.", id);
+			return "no thanks";
+		}
+		String status = notify.getOrder().getStatus();
+		boolean completed = "COMPLETED".equals(status);
+		if (completed) {
+			order.setIsPaid(true);
+			orderService.commit();
+		}
+		return "thanks";
 	}
 
 }

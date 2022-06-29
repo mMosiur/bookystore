@@ -29,6 +29,10 @@
       <div class="row">
         <div class="col-md"></div>
         <div class="col-md">
+          <div th:if="${param.payment}" class="alert alert-warning" role="alert">
+            <span>Payment in progres...</span>
+            <a href="details">Reload</a>
+          </div>
           <div th:if="${successMessage}" class="alert alert-success" role="alert">
             <span th:text="${successMessage}"></span>
           </div>
@@ -65,7 +69,8 @@
               </li>
             </ul>
             <div class="d-flex justify-content-around">
-              <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/orders/manage}">Manage orders</a>
+              <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/orders/manage}">Manage
+                orders</a>
               <a sec:authorize="!hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/orders/list}">My orders</a>
               <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:unless="${order.isCompleted}" method="post"
@@ -73,11 +78,16 @@
                   <input type="hidden" name="id" th:value="${order.id}">
                   <input type="submit" class="btn btn-primary" value="Complete">
                 </form>
-                <form th:if="${order.isCompleted}" method="post" th:action="@{/orders/manage/incomplete(id=${order.id})}">
+                <form th:if="${order.isCompleted}" method="post"
+                  th:action="@{/orders/manage/incomplete(id=${order.id})}">
                   <input type="hidden" name="id" th:value="${order.id}">
                   <input type="submit" class="btn btn-primary" value="Mark as incomplete">
                 </form>
               </div>
+              <form th:if="${isOwner&&!order.isPaid}" method="post" th:action="@{/orders/{id}/payment(id=${order.id})}">
+                <input type="hidden" name="id" th:value="${order.id}">
+                <input type="submit" class="btn btn-primary" value="Pay">
+              </form>
             </div>
           </div>
         </div>
