@@ -49,7 +49,7 @@ public class ManageBooksController {
 
 	@GetMapping
 	public String getManageBooks(Model model) {
-		logger.debug("GET manage books endpoint called");
+		logger.info("GET manage books endpoint called");
 		BookDto newBook = new BookDto();
 		model.addAttribute("newBook", newBook);
 		model.addAttribute("books", this.bookRepository.findAll());
@@ -61,7 +61,7 @@ public class ManageBooksController {
 
 	@PostMapping(params = "delete")
 	public String postManageBooksDelete(Model model, @RequestParam(required = true) long delete) {
-		logger.debug("POST manage books (DELETE variant) endpoint called");
+		logger.info("POST manage books (DELETE variant) endpoint called");
 		BookDto newBook = new BookDto();
 		model.addAttribute("newBook", newBook);
 		try {
@@ -86,7 +86,7 @@ public class ManageBooksController {
 
 	@PostMapping
 	public String postManageBooks(Model model, @ModelAttribute BookDto newBook) {
-		logger.debug("POST manage books endpoint called");
+		logger.info("POST manage books endpoint called");
 		try {
 			AuthorEntity authorEntity = this.authorRepository.findById(newBook.getAuthorId()).orElse(null);
 			if (authorEntity == null) {
@@ -127,7 +127,7 @@ public class ManageBooksController {
 
 	@GetMapping("/{id}/details")
 	public String getBookDetails(Model model, @PathVariable long id) {
-		logger.debug("GET book details endpoint called");
+		logger.info("GET book details endpoint called");
 		model.addAttribute("id", id);
 		BookEntity bookEntity = this.bookRepository.findById(id).orElse(null);
 		BookDto book = null;
@@ -149,7 +149,7 @@ public class ManageBooksController {
 
 	@PostMapping("/{id}/details")
 	public String postBookDetails(Model model, @PathVariable long id, @ModelAttribute BookDto book) {
-		logger.debug("POST book details endpoint called");
+		logger.info("POST book details endpoint called");
 		model.addAttribute("id", id);
 		try {
 			BookEntity bookEntity = this.bookRepository.findById(id).get();

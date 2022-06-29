@@ -40,7 +40,7 @@ public class CartController {
 
 	@GetMapping
 	public String getCart(Model model) {
-		logger.debug("GET cart endpoint called");
+		logger.info("GET cart endpoint called");
 		Set<Long> bookIds = this.cart.getBookIds();
 		List<BookEntity> books = this.bookRepository.findAllById(bookIds);
 		model.addAttribute("books", books);
@@ -51,14 +51,14 @@ public class CartController {
 
 	@PostMapping(params = "addBook")
 	public String postAddToCart(Model model, @RequestParam(name = "addBook", required = true) long addBook) {
-		logger.debug("POST add to cart endpoint called");
+		logger.info("POST add to cart endpoint called");
 		this.cart.add(addBook);
 		return getCart(model);
 	}
 
 	@PostMapping(params = "removeBook")
 	public String postRemoveFromCart(Model model, @RequestParam(name = "removeBook", required = true) long removeBook) {
-		logger.debug("POST remove from cart endpoint called");
+		logger.info("POST remove from cart endpoint called");
 		this.cart.remove(removeBook);
 		return getCart(model);
 	}
@@ -66,7 +66,7 @@ public class CartController {
 	@PostMapping("/test")
 	@ResponseBody
 	public String postTest(Model model, @RequestBody OrderCreationNotifyDto response) {
-		logger.debug("POST test endpoint called");
+		logger.info("POST test endpoint called");
 		return response.getOrder().getStatus();
 	}
 }

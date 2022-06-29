@@ -92,7 +92,7 @@ public class OrderController {
 
 	@PostMapping("/create")
 	public String postCreateOrder(Model model) {
-		logger.debug("POST order endpoint called");
+		logger.info("POST order endpoint called");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
 			return "redirect:/user/login";
@@ -114,7 +114,7 @@ public class OrderController {
 
 	@GetMapping("/manage")
 	public String getManageOrders(Model model) {
-		logger.debug("GET manage orders endpoint called");
+		logger.info("GET manage orders endpoint called");
 		List<OrderEntity> orders = orderService.getAllOrders();
 		List<OrderDto> ordersCompleted = orders.stream()
 				.filter(o -> o.isCompleted())
@@ -131,7 +131,7 @@ public class OrderController {
 
 	@PostMapping("/manage/complete")
 	public String postManageOrdersComplete(Model model, @RequestParam("id") long id) {
-		logger.debug("POST manage orders complete endpoint called");
+		logger.info("POST manage orders complete endpoint called");
 		try {
 			OrderEntity order = this.orderService.getOrderById(id);
 			if (order.isCompleted()) {
@@ -150,7 +150,7 @@ public class OrderController {
 
 	@PostMapping("/manage/incomplete")
 	public String postManageOrdersIncomplete(Model model, @RequestParam("id") long id) {
-		logger.debug("POST manage orders incomplete endpoint called");
+		logger.info("POST manage orders incomplete endpoint called");
 		try {
 			OrderEntity order = this.orderService.getOrderById(id);
 			if (!order.isCompleted()) {
@@ -170,7 +170,7 @@ public class OrderController {
 	@GetMapping("/{id}/details")
 	public String getOrderDetails(Model model, @PathVariable("id") Long id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		logger.debug("GET order details endpoint called");
+		logger.info("GET order details endpoint called");
 		try {
 			OrderEntity order = orderService.getOrderById(id);
 			model.addAttribute("isOwner",
@@ -185,7 +185,7 @@ public class OrderController {
 
 	@PostMapping("/{id}/payment")
 	public String postOrderPayment(Model model, @PathVariable("id") Long id) {
-		logger.debug("POST order payment endpoint called");
+		logger.info("POST order payment endpoint called");
 		try {
 			String redirectUrl = paymentService.initializePayForOrder(id);
 			return "redirect:" + redirectUrl;
@@ -199,12 +199,12 @@ public class OrderController {
 	@ResponseBody
 	public String postOrderPaymentNotification(@PathVariable("id") Long id,
 			@RequestBody OrderCreationNotifyDto notify) {
-		logger.debug("POST order payment notification endpoint called");
+		logger.info("POST order payment notification endpoint called");
 		OrderEntity order = null;
 		try {
 			order = orderService.getOrderById(id);
 		} catch (NoSuchElementException e) {
-			logger.debug("Book with id {} not found.", id);
+			logger.info("Book with id {} not found.", id);
 			return "no thanks";
 		}
 		String status = notify.getOrder().getStatus();

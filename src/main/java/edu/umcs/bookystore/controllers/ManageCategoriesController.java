@@ -37,7 +37,7 @@ public class ManageCategoriesController {
 
 	@GetMapping
 	public String getManageCategories(Model model) {
-		logger.debug("GET manage categories endpoint called");
+		logger.info("GET manage categories endpoint called");
 		CategoryDto newCategory = new CategoryDto();
 		model.addAttribute("newCategory", newCategory);
 		model.addAttribute("categories", this.categoryRepository.findAll());
@@ -46,7 +46,7 @@ public class ManageCategoriesController {
 
 	@PostMapping(params = "delete")
 	public String postManageCategoriesDelete(Model model, @RequestParam(required = true) long delete) {
-		logger.debug("POST manage categories (DELETE variant) endpoint called");
+		logger.info("POST manage categories (DELETE variant) endpoint called");
 		CategoryDto newCategory = new CategoryDto();
 		model.addAttribute("newCategory", newCategory);
 		try {
@@ -71,7 +71,7 @@ public class ManageCategoriesController {
 
 	@PostMapping
 	public String postManageCategories(Model model, @ModelAttribute CategoryDto newCategory) {
-		logger.debug("POST manage categories endpoint called");
+		logger.info("POST manage categories endpoint called");
 		try {
 			CategoryEntity categoryEntity = new CategoryEntity(
 					newCategory.getName());
@@ -91,7 +91,7 @@ public class ManageCategoriesController {
 
 	@GetMapping("/{id}/details")
 	public String getCategoryDetails(Model model, @PathVariable long id) {
-		logger.debug("GET category details endpoint called");
+		logger.info("GET category details endpoint called");
 		model.addAttribute("id", id);
 		CategoryEntity categoryEntity = this.categoryRepository.findById(id).orElse(null);
 		CategoryDto category = null;
@@ -105,7 +105,7 @@ public class ManageCategoriesController {
 
 	@PostMapping("/{id}/details")
 	public String postCategoryDetails(Model model, @PathVariable long id, @ModelAttribute CategoryDto category) {
-		logger.debug("POST category details endpoint called");
+		logger.info("POST category details endpoint called");
 		model.addAttribute("id", id);
 		try {
 			CategoryEntity categoryEntity = this.categoryRepository.findById(id).get();

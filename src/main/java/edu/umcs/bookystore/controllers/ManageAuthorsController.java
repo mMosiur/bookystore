@@ -37,7 +37,7 @@ public class ManageAuthorsController {
 
 	@GetMapping
 	public String getManageAuthors(Model model) {
-		logger.debug("GET manage authors endpoint called");
+		logger.info("GET manage authors endpoint called");
 		AuthorDto newAuthor = new AuthorDto();
 		model.addAttribute("newAuthor", newAuthor);
 		model.addAttribute("authors", this.authorRepository.findAll());
@@ -46,7 +46,7 @@ public class ManageAuthorsController {
 
 	@PostMapping(params = "delete")
 	public String postManageAuthorsDelete(Model model, @RequestParam(required = true) long delete) {
-		logger.debug("POST manage authors (DELETE variant) endpoint called");
+		logger.info("POST manage authors (DELETE variant) endpoint called");
 		AuthorDto newAuthor = new AuthorDto();
 		model.addAttribute("newAuthor", newAuthor);
 		try {
@@ -71,7 +71,7 @@ public class ManageAuthorsController {
 
 	@PostMapping
 	public String postManageAuthors(Model model, @ModelAttribute AuthorDto newAuthor) {
-		logger.debug("POST manage authors endpoint called");
+		logger.info("POST manage authors endpoint called");
 		try {
 			AuthorEntity authorEntity = new AuthorEntity(
 					newAuthor.getFirstName(),
@@ -92,7 +92,7 @@ public class ManageAuthorsController {
 
 	@GetMapping("/{id}/details")
 	public String getAuthorDetails(Model model, @PathVariable long id) {
-		logger.debug("GET author details endpoint called");
+		logger.info("GET author details endpoint called");
 		model.addAttribute("id", id);
 		AuthorEntity authorEntity = this.authorRepository.findById(id).orElse(null);
 		AuthorDto author = null;
@@ -108,7 +108,7 @@ public class ManageAuthorsController {
 
 	@PostMapping("/{id}/details")
 	public String postAuthorDetails(Model model, @PathVariable long id, @ModelAttribute AuthorDto author) {
-		logger.debug("POST author details endpoint called");
+		logger.info("POST author details endpoint called");
 		model.addAttribute("id", id);
 		try {
 			AuthorEntity authorEntity = this.authorRepository.findById(id).get();

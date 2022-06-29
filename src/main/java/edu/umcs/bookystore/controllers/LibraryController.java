@@ -110,7 +110,7 @@ public class LibraryController {
 
 	@GetMapping("/manage")
 	public String getManage(Model model) {
-		logger.debug("GET manage library endpoint called");
+		logger.info("GET manage library endpoint called");
 		return template("manage/index");
 	}
 
