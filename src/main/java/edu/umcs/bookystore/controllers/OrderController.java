@@ -195,9 +195,9 @@ public class OrderController {
 		return getOrderDetails(model, id);
 	}
 
-	@PostMapping("/{id}/payment/notification")
+	@PostMapping("/payment/notification")
 	@ResponseBody
-	public String postOrderPaymentNotification(@PathVariable("id") Long id,
+	public String postOrderPaymentNotification(@RequestParam(name = "id", required = true) Long id,
 			@RequestBody OrderCreationNotifyDto notify) {
 		logger.info("POST order payment notification endpoint called");
 		OrderEntity order = null;
