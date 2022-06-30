@@ -12,21 +12,43 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
-  <h1>TEST 1</h1>
-  <div sec:authorize="isAuthenticated()">
-    <p>This content is only shown to authenticated.</p>
-  </div>
-  <div sec:authorize="hasRole('ROLE_ADMIN')">
-    <p>
-      This content is only shown to administrators.
-      <a th:href="@{/library/manage}">Manage library</a>
-    </p>
-  </div>
-  <div sec:authorize="hasRole('ROLE_USER')">
-    <p>This content is only shown to users.</p>
-  </div>
-  <div>
-    Logged user: <span sec:authentication="name">NAME</span>
+  <div class="container">
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md">
+
+        <h1 class="display-5 m-4 text-center">Welcome to <span class="display-1">BookyStore</span></h1>
+        <p class="lead" sec:authorize="isAuthenticated()">
+          You are logged in, yay! Go on and use the site.
+        </p>
+        <p class="lead" sec:authorize="!isAuthenticated()">
+          You are not logged in. <em>Yet</em>. Go ahead and <a th:href="@{/user/login}">log in</a>
+          or <a th:href="@{/user/register}">register</a>.
+        </p>
+        <p class="lead" sec:authorize="hasRole('ROLE_ADMIN')">
+          Also, something tells me that this account is and <em>administrator</em>.
+          You can use your power to e.g. <a th:href="@{/library/manage}">manage library</a>.
+          That is, you can add authors/publishers/categories/books as well as delete and edit them and their stock.
+          Also you can manage <a th:href="@{/orders/manage}">orders</a>,
+          remember to mark them as <em>complete</em> if you have sent the books to the customer.
+          You did send them, didn't you? Well, if you make a mistake, you can also mark them as <em>incomplete</em>.
+        </p>
+        <p class="lead" sec:authorize="hasRole('ROLE_USER')">
+          You are a regular user. Go on and use the site.
+        </p>
+        <p class="lead">
+          What else can you do? For example, you can <a th:href="@{/library/browse}">browse the library</a>.
+          You can do that even not logged in, as well as add books to your cart.
+          But to make an order you will have to log in.
+          Don't worry, that won't reset you cart content.
+        </p>
+        <p class="lead">
+          You can view <a th:href="@{/orders/list}">you order list</a>, go through them and pay for them
+          in order for an admin to begin shipping.
+        </p>
+      </div>
+      <div class="col-md"></div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
