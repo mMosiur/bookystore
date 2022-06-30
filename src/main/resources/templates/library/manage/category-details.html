@@ -12,7 +12,7 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
-  <h1 class="header m-4 text-center">Category details</h1>
+  <h1 class="display-2 m-4 text-center">Category details</h1>
 
   <div sec:authorize="!isAuthenticated()">
     <div class="alert alert-warning" role="alert">
@@ -61,7 +61,7 @@
             <div th:if="${category}">
               <form method="post" th:object="${category}"
                 th:action="@{/library/manage/categories/{id}/details(id=${id})}">
-                <h2 class="header m-4 text-center">Edit category</h2>
+                <h2 class="display-6 m-4 text-center">Edit category</h2>
                 <div class="mb-3">
                   <label for="inputCategoryName" class="form-label">Name</label>
                   <input type="text" class="form-control" th:field="*{name}" id="inputCategoryName" required>

@@ -12,7 +12,7 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
-  <h1 class="header m-4 text-center">My orders</h1>
+  <h1 class="display-2 m-4 text-center">My orders</h1>
 
   <div sec:authorize="!isAuthenticated()">
     <div class="alert alert-warning" role="alert">
@@ -37,7 +37,7 @@
           </div>
 
           <div>
-            <h2 class="header mb-4">In progress</h2>
+            <h2 class="display-6 mb-4">In progress</h2>
             <p th:if="${ordersInProgress.size==0}">No orders</p>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
@@ -73,7 +73,7 @@
               <div id="accordionListOrdersBody" class="accordion-collapse collapse"
                 aria-labelledby="accordionListOrdersHeader" data-bs-parent="#accordionListOrders">
                 <div class="accordion-body">
-                  <h2 class="header mb-4">Past orders</h2>
+                  <h2 class="display-6 mb-4">Past orders</h2>
                   <p th:if="${ordersCompleted.size==0}">No orders</p>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center"

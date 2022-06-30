@@ -12,7 +12,7 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
-  <h1 class="header m-4 text-center">Author details</h1>
+  <h1 class="display-2 m-4 text-center">Author details</h1>
 
   <div sec:authorize="!isAuthenticated()">
     <div class="alert alert-warning" role="alert">
@@ -58,7 +58,7 @@
             </div>
             <div th:if="${author}">
               <form method="post" th:object="${author}" th:action="@{/library/manage/authors/{id}/details(id=${id})}">
-                <h2 class="header m-4 text-center">Edit author</h2>
+                <h2 class="display-6 m-4 text-center">Edit author</h2>
                 <div class="mb-3">
                   <label for="inputAuthorFirstName" class="form-label">First name</label>
                   <input type="text" class="form-control" th:field="*{firstName}" id="inputAuthorFirstName" required>

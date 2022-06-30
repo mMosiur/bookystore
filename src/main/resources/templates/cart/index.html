@@ -24,7 +24,7 @@
         </div>
 
         <div th:if="${isEmpty}">
-          <h1 class="header m-4 text-center">No books in cart</h1>
+          <h1 class="display-2 m-4 text-center">No books in cart</h1>
           <p class="text-center">The cart is empty.</p>
           <p class="text-center">Go ahead and browse some books!</p>
           <div class="d-flex justify-content-center">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div th:unless="${isEmpty}">
-          <h1 class="header m-4 text-center">Books in cart</h1>
+          <h1 class="display-2 m-4 text-center">Books in cart</h1>
           <ul class="list-group mb-2">
             <li class="list-group-item d-flex justify-content-between align-items-start" th:each="book: ${books}">
               <div class="ms-2 me-auto">
