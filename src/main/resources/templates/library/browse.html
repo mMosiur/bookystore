@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bookystore - Manage publishers</title>
+  <title>BookyStore - Browse library</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
@@ -12,7 +12,7 @@
 <body>
   <nav th:replace="fragments/header :: header"></nav>
 
-  <h1 class="header m-4 text-center">Browse library</h1>
+  <h1 class="display-2 m-4 text-center">Browse library</h1>
 
   <div class="container">
     <div class="row">
@@ -31,7 +31,7 @@
               aria-labelledby="accordionFilterBrowseHeader" data-bs-parent="#accordionFilterBrowse">
               <div class="accordion-body">
                 <form method="get">
-                  <h2>Filter by</h2>
+                  <h2 class="display-6">Filter by</h2>
                   <div class="mb-2">
                     <label for="inputFilterAuthor" class="form-label">Author</label>
                     <select class="form-select" name="filterAuthor" id="inputFilterAuthor">

@@ -1,4 +1,4 @@
-# Bookystore
+# BookyStore
 
 [![Continuous Integration](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml) \
 [![Continuous Deployment](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml)
@@ -9,9 +9,9 @@ System księgarni do projektu zaliczeniowego z przedmiotu "Systemy klasy Enterpr
 
 - [x] **3**: CRUD + Spring Security z podziałem na role : *admin* - dodaje i usuwa książki z księgarni, *user* możne przeglądać.
 - [x] **3.5**: CRUD + koszyk - Dodawanie, usuwanie książek przez *usera*.
-- [ ] **4**: Zamówienia - Dodanie funkcji które może wykonywać *user* - składanie zamówień na książki, zmiana statusu zamówienia przez *admina*.
-- [ ] **4.5**: Wygląd aplikacji - Można użyć bootstrapa / własny bardziej rozbudowany projekt lub bardziej rozszerzony projekt z przykładu
-- [ ] **5**: Płatności - podpięcie np. PayU
+- [x] **4**: Zamówienia - Dodanie funkcji które może wykonywać *user* - składanie zamówień na książki, zmiana statusu zamówienia przez *admina*.
+- [x] **4.5**: Wygląd aplikacji - Można użyć bootstrapa / własny bardziej rozbudowany projekt lub bardziej rozszerzony projekt z przykładu
+- [x] **5**: Płatności - podpięcie np. PayU
 
 ## Technologie
 
@@ -21,6 +21,8 @@ System księgarni do projektu zaliczeniowego z przedmiotu "Systemy klasy Enterpr
 - [Thymeleaf](https://www.thymeleaf.org/)
 - [Bootstrap](https://getbootstrap.com/)
 - [Docker](https://www.docker.com/)
+- [Azure](https://azure.microsoft.com/pl-pl/)
+- [PayU](https://developers.payu.com/pl/overview.html)
 
 ## Kompilacja
 
@@ -43,6 +45,8 @@ W projekcie zdefiniowane są trzy profile:
   Uruchamia bazę danych H2 in-memory oraz dodaje do niej konsolę pod adresem */h2-console*.
   Baza jest usuwana i tworzona od nowa za każdym uruchomieniem.
   Jawnie możemy go sprecyzować do kompilacji dodając flagę `-Pdev`.
+  UWAGA: w środowisku `dev` nie będzie działał callback z PayU (no bo `localhost`),
+  więc trzeba symulować jego przyjście ręcznie.
 
 - #### Profil `docker`:
 
@@ -51,17 +55,25 @@ W projekcie zdefiniowane są trzy profile:
   na nazwie hosta pochodzącej z sieci wewnętrznej dockera.
   Baza jest aktualizowana do najnowszej wersji, a dane z niej persystują w utworzonym przez
   dockera [woluminie](https://docs.docker.com/storage/volumes/).
+  UWAGA: w środowisku `docker` nie będzie działał callback z PayU (no bo `localhost`),
+  więc trzeba symulować jego przyjście ręcznie.
 
 - #### Profil `prod`:
 
   Profil dedykowany dla uruchomienia w środowisku produkcyjnym.
   Używane jest przez pipeline `cd.yml` uruchamiany jako GitHub action,
   który buduje z nim aplikację wstawiając wrażliwe dane ze zmiennych środowiskowych,
-  które są przekazywane z GitHub secrets.
+  które są przekazywane z GitHub secrets. Deploy aplikacji znajduje się w platformie [Azure](https://azure.microsoft.com/pl-pl/).
 
 ## Uruchomienie
 
 (najprostszy sposób z wykorzystaniem dockera na końcu sekcji)
+
+Nie trzeba tak na prawdę uruchamiać aplikacji u siebie.
+Jest ona dostępna w środowisku produkcyjnym pod adresem
+[https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).
+
+Jeśli jednak chcemy lokalnie:
 
 Projekt uruchomić można bezpośrednio z kodu za pomocą cyklu mavena:
 
@@ -102,10 +114,18 @@ Uruchomi to obraz bazy danych oraz obraz aplikacji (wykorzysta do tego `Dockerfi
 Wykorzysta więc profil [`docker`](#profil-docker).
 Aplikacja będzie dostępna na porcie `8080`.
 
+## Deploy
+
+Środowisko produkcyjne działa pod adresem [https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).
+Z każdym *pushem* nowego kodu na gałąź `main` uruchamia się proces deployu na platformę Azure najświeższej wersji aplikacji.
+
 ## Obsługa
 
 Domyślnie utworzony użytkownik:
 
-- **email**: admin@bookystore.com
-- **hasło**: password
-- **rola**: admin
+- **email**: `admin@bookystore.com`
+- **hasło**: `password`
+- **rola**: `admin`
+
+Utworzyć można także swoich nowych użytkowników,
+każdy zarejestrowany użytkownik domyślnie otrzymuje rolę `user`.
