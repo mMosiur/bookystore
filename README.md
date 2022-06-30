@@ -1,4 +1,4 @@
-# Bookystore
+# BookyStore
 
 [![Continuous Integration](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml) \
 [![Continuous Deployment](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml)
