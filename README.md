@@ -1,6 +1,6 @@
 # BookyStore
 
-**ARCHIVED**, środowisko produkcyjne wyłączone.
+**ARCHIVED**, środowisko produkcyjne wyłączone, CI/CD wyłączone.
 
 [![Continuous Integration](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/ci.yml) \
 [![Continuous Deployment](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml/badge.svg)](https://github.com/mMosiur/bookystore/actions/workflows/cd.yml)
@@ -71,9 +71,9 @@ W projekcie zdefiniowane są trzy profile:
 
 (najprostszy sposób z wykorzystaniem dockera na końcu sekcji)
 
-Nie trzeba tak na prawdę uruchamiać aplikacji u siebie.
-Jest ona dostępna w środowisku produkcyjnym pod adresem
-[https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).
+~Nie trzeba tak na prawdę uruchamiać aplikacji u siebie.~
+~Jest ona dostępna w środowisku produkcyjnym pod adresem~
+~[https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).~
 
 Jeśli jednak chcemy lokalnie:
 
@@ -116,10 +116,10 @@ Uruchomi to obraz bazy danych oraz obraz aplikacji (wykorzysta do tego `Dockerfi
 Wykorzysta więc profil [`docker`](#profil-docker).
 Aplikacja będzie dostępna na porcie `8080`.
 
-## Deploy
+## ~Deploy~
 
-Środowisko produkcyjne działa pod adresem [https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).
-Z każdym *pushem* nowego kodu na gałąź `main` uruchamia się proces deployu na platformę Azure najświeższej wersji aplikacji.
+~Środowisko produkcyjne działa pod adresem [https://bookystore.azurewebsites.net](https://bookystore.azurewebsites.net).~
+~Z każdym *pushem* nowego kodu na gałąź `main` uruchamia się proces deployu na platformę Azure najświeższej wersji aplikacji.~
 
 ## Obsługa
 
